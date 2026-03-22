@@ -1,0 +1,298 @@
+[
+  {
+    "event_date": "2023-03-31",
+    "event_label": "Переговоры о мире",
+    "category": "diplomacy",
+    "post_count": 118,
+    "total_posts": 904,
+    "channel_count": 5,
+    "valence_mean": -0.06,
+    "valence_std": 2.29,
+    "valence_min": -5,
+    "valence_max": 5,
+    "arousal_mean": 1.86,
+    "arousal_std": 1.16,
+    "mood_dominant": "недовольство",
+    "mood_distribution": {
+      "недовольство": 36,
+      "сдержанный_оптимизм": 20,
+      "нейтрально": 17,
+      "оптимизм": 16,
+      "тревога": 13,
+      "агрессия": 6,
+      "ярость": 5,
+      "уныние": 3,
+      "эйфория": 2
+    },
+    "topics_top": [
+      "украина_политика",
+      "запад_нато",
+      "переговоры_дипломатия",
+      "пропаганда_медиа",
+      "украина_потери"
+    ],
+    "channel_valences": {
+      "milinfolive": -0.33,
+      "dva_majors": -0.22,
+      "apwagner": 0.05,
+      "zhivoff": 0.11,
+      "romanov_92": 1
+    }
+  },
+  {
+    "event_date": "2023-04-12",
+    "event_label": "Репрессии — Стрелков",
+    "category": "internal",
+    "post_count": 89,
+    "total_posts": 942,
+    "channel_count": 5,
+    "valence_mean": -0.73,
+    "valence_std": 2.07,
+    "valence_min": -5,
+    "valence_max": 5,
+    "arousal_mean": 1.58,
+    "arousal_std": 1.02,
+    "mood_dominant": "недовольство",
+    "mood_distribution": {
+      "недовольство": 46,
+      "сдержанный_оптимизм": 16,
+      "нейтрально": 6,
+      "оптимизм": 5,
+      "тревога": 4,
+      "агрессия": 4,
+      "уныние": 3,
+      "эйфория": 2,
+      "ярость": 2,
+      "паника": 1
+    },
+    "topics_top": [
+      "репрессии_цензура",
+      "внутренняя_политика",
+      "пропаганда_медиа",
+      "командование",
+      "запад_нато"
+    ],
+    "channel_valences": {
+      "romanov_92": -1.33,
+      "zhivoff": -1.3,
+      "apwagner": -0.7,
+      "dva_majors": -0.47,
+      "milinfolive": -0.33
+    }
+  },
+  {
+    "event_date": "2023-04-25",
+    "event_label": "Пригожин и ЧВК Вагнер",
+    "category": "war",
+    "post_count": 100,
+    "total_posts": 719,
+    "channel_count": 5,
+    "valence_mean": 0.12,
+    "valence_std": 2.08,
+    "valence_min": -5,
+    "valence_max": 5,
+    "arousal_mean": 1.6,
+    "arousal_std": 1.02,
+    "mood_dominant": "сдержанный_оптимизм",
+    "mood_distribution": {
+      "сдержанный_оптимизм": 30,
+      "недовольство": 26,
+      "нейтрально": 15,
+      "оптимизм": 14,
+      "тревога": 3,
+      "агрессия": 3,
+      "уныние": 3,
+      "эйфория": 2,
+      "ярость": 2,
+      "паника": 1
+    },
+    "topics_top": [
+      "донбасс",
+      "фронт_наступление",
+      "командование",
+      "внутренняя_политика",
+      "пропаганда_медиа"
+    ],
+    "channel_valences": {
+      "zhivoff": -1,
+      "dva_majors": -0.35,
+      "romanov_92": 0,
+      "apwagner": 0.25,
+      "milinfolive": 0.69
+    }
+  },
+  {
+    "event_date": "2024-08-07",
+    "event_label": "Вторжение ВСУ в Курскую область",
+    "category": "unknown",
+    "post_count": 988,
+    "total_posts": 1517,
+    "channel_count": 10,
+    "valence_mean": -0.87,
+    "valence_std": 1.76,
+    "valence_min": -5,
+    "valence_max": 5,
+    "arousal_mean": 1.84,
+    "arousal_std": 1.04,
+    "mood_dominant": "тревога",
+    "mood_distribution": {
+      "тревога": 332,
+      "недовольство": 212,
+      "нейтрально": 174,
+      "сдержанный_оптимизм": 168,
+      "оптимизм": 39,
+      "ярость": 29,
+      "агрессия": 17,
+      "уныние": 8,
+      "паника": 6,
+      "эйфория": 3
+    },
+    "topics_top": [
+      "курское_направление",
+      "фронт_наступление",
+      "тактика_стратегия",
+      "артиллерия_обстрелы",
+      "командование"
+    ],
+    "channel_valences": {
+      "philologist_zov": -2.09,
+      "romanov_92": -1.94,
+      "akashevarova": -1.83,
+      "apwagner": -1.61,
+      "zhivoff": -0.96,
+      "voenkorKotenok": -0.9,
+      "Alekhin_Telega": -0.63,
+      "dva_majors": -0.53,
+      "milinfolive": -0.5,
+      "vault8pro": -0.44
+    }
+  },
+  {
+    "event_date": "2024-10-09",
+    "event_label": "Блокировка Discord",
+    "category": "unknown",
+    "post_count": 63,
+    "total_posts": 1076,
+    "channel_count": 8,
+    "valence_mean": -1.05,
+    "valence_std": 1.53,
+    "valence_min": -3,
+    "valence_max": 3,
+    "arousal_mean": 1.51,
+    "arousal_std": 0.78,
+    "mood_dominant": "недовольство",
+    "mood_distribution": {
+      "недовольство": 39,
+      "сдержанный_оптимизм": 12,
+      "тревога": 7,
+      "нейтрально": 4,
+      "оптимизм": 1
+    },
+    "topics_top": [
+      "репрессии_цензура",
+      "рэб_связь",
+      "пропаганда_медиа",
+      "бпла_дроны",
+      "запад_нато"
+    ],
+    "channel_valences": {
+      "zhivoff": -2.38,
+      "voenkorKotenok": -2,
+      "philologist_zov": -1.67,
+      "vault8pro": -1.5,
+      "dva_majors": -0.88,
+      "apwagner": -0.76,
+      "milinfolive": -0.29,
+      "Alekhin_Telega": 0
+    }
+  },
+  {
+    "event_date": "2025-01-20",
+    "event_label": "Переговоры: Путин—Трамп",
+    "category": "unknown",
+    "post_count": 172,
+    "total_posts": 1136,
+    "channel_count": 8,
+    "valence_mean": -0.16,
+    "valence_std": 2.05,
+    "valence_min": -5,
+    "valence_max": 5,
+    "arousal_mean": 1.51,
+    "arousal_std": 1.01,
+    "mood_dominant": "сдержанный_оптимизм",
+    "mood_distribution": {
+      "сдержанный_оптимизм": 51,
+      "недовольство": 46,
+      "нейтрально": 24,
+      "тревога": 21,
+      "оптимизм": 20,
+      "паника": 4,
+      "эйфория": 3,
+      "ярость": 1,
+      "агрессия": 1,
+      "уныние": 1
+    },
+    "topics_top": [
+      "переговоры_дипломатия",
+      "запад_нато",
+      "украина_политика",
+      "пропаганда_медиа",
+      "внутренняя_политика"
+    ],
+    "channel_valences": {
+      "romanov_92": -1.6,
+      "Alekhin_Telega": -1.17,
+      "akashevarova": -1,
+      "voenkorKotenok": -0.71,
+      "zhivoff": -0.62,
+      "dva_majors": -0.12,
+      "milinfolive": 0,
+      "apwagner": 0.33
+    }
+  },
+  {
+    "event_date": "2025-09-19",
+    "event_label": "Репрессии — Савва Федосеев",
+    "category": "internal",
+    "post_count": 192,
+    "total_posts": 941,
+    "channel_count": 10,
+    "valence_mean": -0.44,
+    "valence_std": 1.98,
+    "valence_min": -5,
+    "valence_max": 3,
+    "arousal_mean": 1.54,
+    "arousal_std": 0.84,
+    "mood_dominant": "недовольство",
+    "mood_distribution": {
+      "недовольство": 65,
+      "сдержанный_оптимизм": 40,
+      "тревога": 31,
+      "нейтрально": 25,
+      "оптимизм": 21,
+      "агрессия": 5,
+      "уныние": 3,
+      "паника": 1,
+      "эйфория": 1
+    },
+    "topics_top": [
+      "репрессии_цензура",
+      "внутренняя_политика",
+      "украина_политика",
+      "бпла_дроны",
+      "артиллерия_обстрелы"
+    ],
+    "channel_valences": {
+      "akashevarova": -3,
+      "Alekhin_Telega": -2.57,
+      "philologist_zov": -2,
+      "vault8pro": -2,
+      "romanov_92": -1,
+      "dva_majors": -0.78,
+      "zhivoff": -0.46,
+      "voenkorKotenok": -0.24,
+      "milinfolive": -0.14,
+      "apwagner": 0.09
+    }
+  }
+]

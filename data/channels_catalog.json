@@ -1,0 +1,652 @@
+[
+  {
+    "channel": "milinfolive",
+    "mention_count": 403,
+    "first_seen": "2023-09-13",
+    "last_seen": "2026-03-19",
+    "sample_post_ids": [
+      108795,
+      109249,
+      114375,
+      114408,
+      107320
+    ]
+  },
+  {
+    "channel": "dva_majors",
+    "mention_count": 375,
+    "first_seen": "2023-03-26",
+    "last_seen": "2026-03-18",
+    "sample_post_ids": [
+      25721,
+      25958,
+      26186,
+      26812,
+      27574
+    ]
+  },
+  {
+    "channel": "apwagner",
+    "mention_count": 289,
+    "first_seen": "2023-06-24",
+    "last_seen": "2026-03-16",
+    "sample_post_ids": [
+      9116,
+      12695,
+      13310,
+      13641,
+      13749
+    ]
+  },
+  {
+    "channel": "zhivoff",
+    "mention_count": 224,
+    "first_seen": "2023-09-13",
+    "last_seen": "2026-03-19",
+    "sample_post_ids": [
+      10876,
+      10910,
+      10917,
+      10934,
+      10944
+    ]
+  },
+  {
+    "channel": "romanov_92",
+    "mention_count": 213,
+    "first_seen": "2023-10-18",
+    "last_seen": "2026-03-18",
+    "sample_post_ids": [
+      41902,
+      42295,
+      42358,
+      42365,
+      42557
+    ]
+  },
+  {
+    "channel": "vault8pro",
+    "mention_count": 189,
+    "first_seen": "2023-09-16",
+    "last_seen": "2026-03-17",
+    "sample_post_ids": [
+      50207,
+      50216,
+      50214,
+      50215,
+      50227
+    ]
+  },
+  {
+    "channel": "philologist_zov",
+    "mention_count": 176,
+    "first_seen": "2023-10-13",
+    "last_seen": "2026-03-18",
+    "sample_post_ids": [
+      558,
+      594,
+      593,
+      657,
+      730
+    ]
+  },
+  {
+    "channel": "akashevarova",
+    "mention_count": 175,
+    "first_seen": "2023-11-01",
+    "last_seen": "2026-03-19",
+    "sample_post_ids": [
+      6716,
+      6717,
+      6718,
+      6746,
+      6785
+    ]
+  },
+  {
+    "channel": "voenkorKotenok",
+    "mention_count": 170,
+    "first_seen": "2023-10-02",
+    "last_seen": "2026-03-19",
+    "sample_post_ids": [
+      50926,
+      51518,
+      51576,
+      51648,
+      51669
+    ]
+  },
+  {
+    "channel": "Alekhin_Telega",
+    "mention_count": 170,
+    "first_seen": "2023-10-11",
+    "last_seen": "2026-02-27",
+    "sample_post_ids": [
+      8213,
+      8297,
+      8448,
+      8471,
+      8475
+    ]
+  },
+  {
+    "channel": "rybar",
+    "mention_count": 159,
+    "first_seen": "2023-09-22",
+    "last_seen": "2026-03-19",
+    "sample_post_ids": [
+      52188,
+      53326,
+      53730,
+      53874,
+      54082
+    ]
+  },
+  {
+    "channel": "SergeyKolyasnikov",
+    "mention_count": 151,
+    "first_seen": "2023-06-24",
+    "last_seen": "2026-03-18",
+    "sample_post_ids": [
+      49756,
+      52330,
+      53462,
+      54057,
+      54112
+    ]
+  },
+  {
+    "channel": "infomil_live",
+    "mention_count": 147,
+    "first_seen": "2023-10-06",
+    "last_seen": "2026-03-17",
+    "sample_post_ids": [
+      444,
+      2527,
+      2576,
+      3155,
+      3161
+    ]
+  },
+  {
+    "channel": "RSaponkov",
+    "mention_count": 144,
+    "first_seen": "2023-06-24",
+    "last_seen": "2026-03-18",
+    "sample_post_ids": [
+      5401,
+      6097,
+      6165,
+      6164,
+      6275
+    ]
+  },
+  {
+    "channel": "belarusian_silovik",
+    "mention_count": 139,
+    "first_seen": "2023-10-06",
+    "last_seen": "2026-03-18",
+    "sample_post_ids": [
+      22766,
+      24941,
+      26008,
+      27536,
+      27884
+    ]
+  },
+  {
+    "channel": "Z13_Separ",
+    "mention_count": 130,
+    "first_seen": "2023-12-25",
+    "last_seen": "2026-03-17",
+    "sample_post_ids": [
+      23566,
+      23647,
+      24185,
+      24529,
+      25247
+    ]
+  },
+  {
+    "channel": "yurasumy",
+    "mention_count": 119,
+    "first_seen": "2023-12-10",
+    "last_seen": "2026-03-14",
+    "sample_post_ids": [
+      11823,
+      12047,
+      12095,
+      12563,
+      12852
+    ]
+  },
+  {
+    "channel": "notes_veterans",
+    "mention_count": 109,
+    "first_seen": "2023-10-19",
+    "last_seen": "2026-03-09",
+    "sample_post_ids": [
+      12950,
+      13214,
+      13220,
+      13618,
+      13777
+    ]
+  },
+  {
+    "channel": "regnum_na",
+    "mention_count": 103,
+    "first_seen": "2023-10-08",
+    "last_seen": "2026-03-18",
+    "sample_post_ids": [
+      47808,
+      48798,
+      48939,
+      49581,
+      50707
+    ]
+  },
+  {
+    "channel": "osetin20",
+    "mention_count": 101,
+    "first_seen": "2023-10-06",
+    "last_seen": "2026-03-18",
+    "sample_post_ids": [
+      7162,
+      7333,
+      7418,
+      7463,
+      7513
+    ]
+  },
+  {
+    "channel": "olegtsarov",
+    "mention_count": 98,
+    "first_seen": "2023-06-24",
+    "last_seen": "2026-03-18",
+    "sample_post_ids": [
+      6871,
+      6877,
+      6878,
+      8691,
+      8776
+    ]
+  },
+  {
+    "channel": "DmitriySteshin",
+    "mention_count": 97,
+    "first_seen": "2023-06-24",
+    "last_seen": "2026-03-18",
+    "sample_post_ids": [
+      8237,
+      9025,
+      9157,
+      9326,
+      9361
+    ]
+  },
+  {
+    "channel": "rosgvardeez",
+    "mention_count": 97,
+    "first_seen": "2023-09-26",
+    "last_seen": "2026-02-27",
+    "sample_post_ids": [
+      5554,
+      6119,
+      6342,
+      6391,
+      6443
+    ]
+  },
+  {
+    "channel": "russkii_dom",
+    "mention_count": 97,
+    "first_seen": "2024-09-06",
+    "last_seen": "2026-03-16",
+    "sample_post_ids": [
+      51235,
+      51505,
+      52183,
+      52825,
+      52915
+    ]
+  },
+  {
+    "channel": "ramzayiegokomanda",
+    "mention_count": 95,
+    "first_seen": "2023-04-25",
+    "last_seen": "2026-03-19",
+    "sample_post_ids": [
+      4622,
+      6977,
+      7789,
+      7883,
+      7978
+    ]
+  },
+  {
+    "channel": "ve4niyvoy",
+    "mention_count": 95,
+    "first_seen": "2023-07-25",
+    "last_seen": "2025-12-25",
+    "sample_post_ids": [
+      542,
+      950,
+      1004,
+      913,
+      1026
+    ]
+  },
+  {
+    "channel": "vysokygovorit",
+    "mention_count": 95,
+    "first_seen": "2023-10-18",
+    "last_seen": "2026-02-11",
+    "sample_post_ids": [
+      13180,
+      13328,
+      13349,
+      13517,
+      13573
+    ]
+  },
+  {
+    "channel": "dshrg2",
+    "mention_count": 94,
+    "first_seen": "2023-10-26",
+    "last_seen": "2026-03-11",
+    "sample_post_ids": [
+      1342,
+      1349,
+      1664,
+      1665,
+      1743
+    ]
+  },
+  {
+    "channel": "ghost_of_novorossia",
+    "mention_count": 93,
+    "first_seen": "2023-04-25",
+    "last_seen": "2026-03-18",
+    "sample_post_ids": [
+      10916,
+      15659,
+      16234,
+      16233,
+      16719
+    ]
+  },
+  {
+    "channel": "filatovcorr",
+    "mention_count": 90,
+    "first_seen": "2024-04-04",
+    "last_seen": "2026-03-09",
+    "sample_post_ids": [
+      3009,
+      3026,
+      3030,
+      3026,
+      3100
+    ]
+  },
+  {
+    "channel": "Sladkov_plus",
+    "mention_count": 87,
+    "first_seen": "2023-09-13",
+    "last_seen": "2026-03-06",
+    "sample_post_ids": [
+      8522,
+      8871,
+      8915,
+      9041,
+      9347
+    ]
+  },
+  {
+    "channel": "fighter_bomber",
+    "mention_count": 86,
+    "first_seen": "2023-09-22",
+    "last_seen": "2025-06-06",
+    "sample_post_ids": [
+      14068,
+      14410,
+      14554,
+      15135,
+      15323
+    ]
+  },
+  {
+    "channel": "ZOV_Voevoda",
+    "mention_count": 84,
+    "first_seen": "2023-12-24",
+    "last_seen": "2026-03-18",
+    "sample_post_ids": [
+      4807,
+      6408,
+      6436,
+      6443,
+      7729
+    ]
+  },
+  {
+    "channel": "soldat_prav",
+    "mention_count": 82,
+    "first_seen": "2023-10-26",
+    "last_seen": "2026-03-18",
+    "sample_post_ids": [
+      1125,
+      1349,
+      1683,
+      2573,
+      3206
+    ]
+  },
+  {
+    "channel": "dontstopwar",
+    "mention_count": 81,
+    "first_seen": "2023-12-20",
+    "last_seen": "2026-03-18",
+    "sample_post_ids": [
+      12198,
+      12496,
+      12621,
+      12958,
+      13224
+    ]
+  },
+  {
+    "channel": "cs_association_0",
+    "mention_count": 79,
+    "first_seen": "2024-09-16",
+    "last_seen": "2026-03-17",
+    "sample_post_ids": [
+      1945,
+      2272,
+      2423,
+      2501,
+      3080
+    ]
+  },
+  {
+    "channel": "DnevnikDesantnika",
+    "mention_count": 78,
+    "first_seen": "2023-09-25",
+    "last_seen": "2026-02-24",
+    "sample_post_ids": [
+      3341,
+      4713,
+      4995,
+      5770,
+      6328
+    ]
+  },
+  {
+    "channel": "roy_tv_mk",
+    "mention_count": 77,
+    "first_seen": "2023-10-06",
+    "last_seen": "2026-03-10",
+    "sample_post_ids": [
+      5896,
+      6014,
+      7412,
+      7605,
+      9315
+    ]
+  },
+  {
+    "channel": "Mestb_Dobroj_Voli",
+    "mention_count": 77,
+    "first_seen": "2023-12-21",
+    "last_seen": "2026-02-11",
+    "sample_post_ids": [
+      9346,
+      10236,
+      10599,
+      10621,
+      10750
+    ]
+  },
+  {
+    "channel": "sashakots",
+    "mention_count": 73,
+    "first_seen": "2023-06-24",
+    "last_seen": "2026-02-06",
+    "sample_post_ids": [
+      40555,
+      40556,
+      42471,
+      42466,
+      43042
+    ]
+  },
+  {
+    "channel": "beard_tim",
+    "mention_count": 69,
+    "first_seen": "2024-01-14",
+    "last_seen": "2026-03-16",
+    "sample_post_ids": [
+      15068,
+      15799,
+      16413,
+      16916,
+      16981
+    ]
+  },
+  {
+    "channel": "pionergrupa",
+    "mention_count": 68,
+    "first_seen": "2024-10-30",
+    "last_seen": "2026-03-19",
+    "sample_post_ids": [
+      3832,
+      4033,
+      5334,
+      5954,
+      5862
+    ]
+  },
+  {
+    "channel": "RastaPavel",
+    "mention_count": 67,
+    "first_seen": "2024-09-26",
+    "last_seen": "2026-03-17",
+    "sample_post_ids": [
+      11340,
+      11298,
+      11149,
+      11363,
+      11580
+    ]
+  },
+  {
+    "channel": "rustroyka1945",
+    "mention_count": 64,
+    "first_seen": "2023-09-22",
+    "last_seen": "2025-12-18",
+    "sample_post_ids": [
+      13259,
+      14503,
+      14774,
+      14998,
+      15783
+    ]
+  },
+  {
+    "channel": "RuFront",
+    "mention_count": 63,
+    "first_seen": "2023-10-06",
+    "last_seen": "2026-02-13",
+    "sample_post_ids": [
+      5218,
+      6097,
+      8387,
+      10717,
+      10718
+    ]
+  },
+  {
+    "channel": "warhistoryalconafter",
+    "mention_count": 58,
+    "first_seen": "2023-10-18",
+    "last_seen": "2026-01-07",
+    "sample_post_ids": [
+      127421,
+      127423,
+      128546,
+      129417,
+      138280
+    ]
+  },
+  {
+    "channel": "zakharprilepin",
+    "mention_count": 56,
+    "first_seen": "2023-12-13",
+    "last_seen": "2026-03-16",
+    "sample_post_ids": [
+      20526,
+      21017,
+      21083,
+      21139,
+      21513
+    ]
+  },
+  {
+    "channel": "AlexCarrier",
+    "mention_count": 55,
+    "first_seen": "2023-09-26",
+    "last_seen": "2026-03-19",
+    "sample_post_ids": [
+      4174,
+      4317,
+      4319,
+      4696,
+      4761
+    ]
+  },
+  {
+    "channel": "riakatysha",
+    "mention_count": 52,
+    "first_seen": "2023-10-29",
+    "last_seen": "2026-03-03",
+    "sample_post_ids": [
+      28376,
+      28517,
+      29543,
+      29608,
+      30920
+    ]
+  },
+  {
+    "channel": "Dead_heads",
+    "mention_count": 50,
+    "first_seen": "2023-09-16",
+    "last_seen": "2026-01-10",
+    "sample_post_ids": [
+      278,
+      317,
+      519,
+      541,
+      590
+    ]
+  }
+]

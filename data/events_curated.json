@@ -1,0 +1,1347 @@
+[
+  {
+    "date": "2023-03-31",
+    "label": "Переговоры о мире",
+    "category": "diplomacy",
+    "post_count": 5,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-04-12",
+    "label": "Репрессии — Стрелков",
+    "category": "internal",
+    "post_count": 6,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-04-25",
+    "label": "Пригожин и ЧВК Вагнер",
+    "category": "war",
+    "post_count": 20,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-05-20",
+    "label": "Взятие Бахмута силами ЧВК Вагнер",
+    "category": "war",
+    "post_count": 0,
+    "sources": [
+      "external"
+    ]
+  },
+  {
+    "date": "2023-05-30",
+    "label": "Пригожин и ЧВК Вагнер",
+    "category": "internal",
+    "post_count": 10,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-06-06",
+    "label": "Разрушение Каховской ГЭС",
+    "category": "war",
+    "post_count": 0,
+    "sources": [
+      "external"
+    ]
+  },
+  {
+    "date": "2023-06-08",
+    "label": "Начало контрнаступления ВСУ (Запорожье/Донбасс)",
+    "category": "war",
+    "post_count": 0,
+    "sources": [
+      "external"
+    ]
+  },
+  {
+    "date": "2023-06-09",
+    "label": "Пригожин и ЧВК Вагнер",
+    "category": "war",
+    "post_count": 4,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-06-10",
+    "label": "Мятеж Пригожина",
+    "category": "internal",
+    "post_count": 37,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-06-19",
+    "label": "Мятеж Пригожина / Марш на Москву",
+    "category": "war",
+    "post_count": 10,
+    "sources": [
+      "v1_clustering",
+      "external"
+    ]
+  },
+  {
+    "date": "2023-06-23",
+    "label": "Пригожин и ЧВК Вагнер",
+    "category": "war",
+    "post_count": 7,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-07-04",
+    "label": "Пригожин и ЧВК Вагнер",
+    "category": "internal",
+    "post_count": 6,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-07-07",
+    "label": "США передают кассетные боеприпасы Украине",
+    "category": "war",
+    "post_count": 0,
+    "sources": [
+      "external"
+    ]
+  },
+  {
+    "date": "2023-07-12",
+    "label": "Мятеж Пригожина",
+    "category": "internal",
+    "post_count": 12,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-07-13",
+    "label": "Арест/суд Стрелкова",
+    "category": "internal",
+    "post_count": 18,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-07-30",
+    "label": "Арест/суд Стрелкова",
+    "category": "internal",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-08-15",
+    "label": "Чвк вагнер — Шойгу",
+    "category": "internal",
+    "post_count": 4,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-08-21",
+    "label": "Гибель Пригожина в авиакатастрофе",
+    "category": "internal",
+    "post_count": 8,
+    "sources": [
+      "v1_clustering",
+      "external"
+    ]
+  },
+  {
+    "date": "2023-08-23",
+    "label": "Пригожин и ЧВК Вагнер",
+    "category": "war",
+    "post_count": 8,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-08-27",
+    "label": "Арест/суд Стрелкова",
+    "category": "internal",
+    "post_count": 10,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-09-03",
+    "label": "Кадровые перестановки: Суровикин",
+    "category": "war",
+    "post_count": 4,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-09-07",
+    "label": "Армения — Пашинян",
+    "category": "war",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-09-19",
+    "label": "Операция Азербайджана в Нагорном Карабахе",
+    "category": "diplomacy",
+    "post_count": 0,
+    "sources": [
+      "external"
+    ]
+  },
+  {
+    "date": "2023-10-12",
+    "label": "Взятие Авдеевки",
+    "category": "war",
+    "post_count": 6,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-10-17",
+    "label": "Первое применение ATACMS Украиной",
+    "category": "war",
+    "post_count": 0,
+    "sources": [
+      "external"
+    ]
+  },
+  {
+    "date": "2023-10-24",
+    "label": "Арест/суд Стрелкова",
+    "category": "internal",
+    "post_count": 28,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-10-29",
+    "label": "Антисемитский погром в Махачкале",
+    "category": "internal",
+    "post_count": 7,
+    "sources": [
+      "v1_clustering",
+      "external"
+    ]
+  },
+  {
+    "date": "2023-11-16",
+    "label": "Арест/суд: Скочиленко",
+    "category": "internal",
+    "post_count": 4,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-11-17",
+    "label": "Идеология — Прилепин",
+    "category": "internal",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-11-17",
+    "label": "Выборы: Стрелков",
+    "category": "internal",
+    "post_count": 4,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-11-24",
+    "label": "Переговоры о мире",
+    "category": "internal",
+    "post_count": 8,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-12-22",
+    "label": "Традиционные ценности — Ивлеева",
+    "category": "internal",
+    "post_count": 4,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-12-25",
+    "label": "Стрелков — Стрелков",
+    "category": "internal",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2023-12-30",
+    "label": "Внутренние противоречия — Медведев",
+    "category": "internal",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-01-18",
+    "label": "Арест/суд Стрелкова",
+    "category": "internal",
+    "post_count": 11,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-01-27",
+    "label": "Интервью Путина у Карлсона",
+    "category": "internal",
+    "post_count": 15,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-02-03",
+    "label": "Репрессии — Стрелков",
+    "category": "internal",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-02-09",
+    "label": "Интервью Путина Такеру Карлсону",
+    "category": "internal",
+    "post_count": 0,
+    "sources": [
+      "external"
+    ]
+  },
+  {
+    "date": "2024-02-15",
+    "label": "Взятие Авдеевки российскими войсками",
+    "category": "war",
+    "post_count": 15,
+    "sources": [
+      "v1_clustering",
+      "external"
+    ]
+  },
+  {
+    "date": "2024-02-16",
+    "label": "Смерть Навального в колонии",
+    "category": "internal",
+    "post_count": 0,
+    "sources": [
+      "external"
+    ]
+  },
+  {
+    "date": "2024-02-17",
+    "label": "Навальный: реакция",
+    "category": "internal",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-03-01",
+    "label": "Похороны Навального",
+    "category": "internal",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-03-17",
+    "label": "Президентские выборы в России",
+    "category": "internal",
+    "post_count": 0,
+    "sources": [
+      "external"
+    ]
+  },
+  {
+    "date": "2024-03-22",
+    "label": "Теракт в «Крокус Сити Холл»",
+    "category": "internal",
+    "post_count": 13,
+    "sources": [
+      "v1_clustering",
+      "external"
+    ]
+  },
+  {
+    "date": "2024-04-22",
+    "label": "Арест замминистра обороны Тимура Иванова",
+    "category": "war",
+    "post_count": 5,
+    "sources": [
+      "v1_clustering",
+      "external"
+    ]
+  },
+  {
+    "date": "2024-04-24",
+    "label": "Арест/суд: Шойгу",
+    "category": "internal",
+    "post_count": 4,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-05-07",
+    "label": "Отставка Шойгу, назначение Белоусова",
+    "category": "internal",
+    "post_count": 15,
+    "sources": [
+      "v1_clustering",
+      "external"
+    ]
+  },
+  {
+    "date": "2024-05-13",
+    "label": "Министерство обороны — Белоусов",
+    "category": "war",
+    "post_count": 4,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-05-15",
+    "label": "Atacms — Кирилл Федоров",
+    "category": "war",
+    "post_count": 4,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-05-17",
+    "label": "Национальная политика — Олег Царев",
+    "category": "internal",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-05-21",
+    "label": "Дезинформация — Шойгу",
+    "category": "internal",
+    "post_count": 6,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-06-16",
+    "label": "Цензура — Анатолий Радов",
+    "category": "internal",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-06-23",
+    "label": "Удар ATACMS по Севастополю",
+    "category": "war",
+    "post_count": 0,
+    "sources": [
+      "external"
+    ]
+  },
+  {
+    "date": "2024-06-23",
+    "label": "Теракт в Махачкале и Дербенте",
+    "category": "internal",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering",
+      "external"
+    ]
+  },
+  {
+    "date": "2024-06-26",
+    "label": "Министерство обороны — Степашин",
+    "category": "war",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-07-14",
+    "label": "Запад — Байден",
+    "category": "internal",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-07-23",
+    "label": "Связь — Картаполов",
+    "category": "war",
+    "post_count": 16,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-07-28",
+    "label": "Пригожин и ЧВК Вагнер",
+    "category": "war",
+    "post_count": 4,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-07-28",
+    "label": "Бои в Курской области",
+    "category": "war",
+    "post_count": 36,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-08-06",
+    "label": "Вторжение ВСУ в Курскую область",
+    "category": "war",
+    "post_count": 51,
+    "sources": [
+      "v1_clustering",
+      "external"
+    ]
+  },
+  {
+    "date": "2024-08-17",
+    "label": "Управление — Роман Алехин",
+    "category": "internal",
+    "post_count": 4,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-09-01",
+    "label": "Бои в Курской области",
+    "category": "war",
+    "post_count": 17,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-09-10",
+    "label": "Конфликт вокруг Кадырова",
+    "category": "internal",
+    "post_count": 4,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-09-10",
+    "label": "Переговоры — Шойгу",
+    "category": "war",
+    "post_count": 5,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-09-16",
+    "label": "Бои в Курской области",
+    "category": "war",
+    "post_count": 18,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-09-16",
+    "label": "Военные преступления — Гудвин",
+    "category": "war",
+    "post_count": 6,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-09-18",
+    "label": "Склады боеприпасов — Олег Царев",
+    "category": "war",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-09-29",
+    "label": "Командиры — Белоусов",
+    "category": "internal",
+    "post_count": 4,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-10-01",
+    "label": "Взятие Угледара российскими войсками",
+    "category": "war",
+    "post_count": 0,
+    "sources": [
+      "external"
+    ]
+  },
+  {
+    "date": "2024-10-05",
+    "label": "Арест/суд: Гузенко",
+    "category": "internal",
+    "post_count": 5,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-10-08",
+    "label": "Блокировка Discord в России",
+    "category": "war",
+    "post_count": 4,
+    "sources": [
+      "v1_clustering",
+      "external"
+    ]
+  },
+  {
+    "date": "2024-10-12",
+    "label": "Бои в Курской области",
+    "category": "war",
+    "post_count": 12,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-10-18",
+    "label": "Подтверждение участия солдат КНДР на фронте",
+    "category": "war",
+    "post_count": 0,
+    "sources": [
+      "external"
+    ]
+  },
+  {
+    "date": "2024-10-30",
+    "label": "Бои в Курской области",
+    "category": "war",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-11-13",
+    "label": "Выплаты — Никита Третьяков",
+    "category": "war",
+    "post_count": 5,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-11-14",
+    "label": "Переговоры — Трамп",
+    "category": "war",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-11-17",
+    "label": "Первый пуск ракеты «Орешник»",
+    "category": "war",
+    "post_count": 9,
+    "sources": [
+      "v1_clustering",
+      "external"
+    ]
+  },
+  {
+    "date": "2024-11-26",
+    "label": "Atacms — Медведев",
+    "category": "war",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-11-29",
+    "label": "Падение режима Асада",
+    "category": "war",
+    "post_count": 40,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-12-05",
+    "label": "Конфликт вокруг Кадырова",
+    "category": "internal",
+    "post_count": 5,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-12-08",
+    "label": "Падение режима Асада в Сирии",
+    "category": "diplomacy",
+    "post_count": 0,
+    "sources": [
+      "external"
+    ]
+  },
+  {
+    "date": "2024-12-13",
+    "label": "Бои в Курской области",
+    "category": "war",
+    "post_count": 32,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-12-23",
+    "label": "Ракета «Орешник»",
+    "category": "war",
+    "post_count": 9,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2024-12-29",
+    "label": "Либералы — Долгарева",
+    "category": "internal",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-01-07",
+    "label": "Переговоры: Путин—Трамп",
+    "category": "internal",
+    "post_count": 13,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-01-20",
+    "label": "Переговоры о мире",
+    "category": "war",
+    "post_count": 7,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-01-20",
+    "label": "Инаугурация Трампа",
+    "category": "diplomacy",
+    "post_count": 0,
+    "sources": [
+      "external"
+    ]
+  },
+  {
+    "date": "2025-02-03",
+    "label": "Вторжение ВСУ в Курскую область",
+    "category": "war",
+    "post_count": 14,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-02-12",
+    "label": "Начало переговоров Путин-Трамп",
+    "category": "diplomacy",
+    "post_count": 0,
+    "sources": [
+      "external"
+    ]
+  },
+  {
+    "date": "2025-02-13",
+    "label": "Переговоры: Путин—Трамп",
+    "category": "war",
+    "post_count": 62,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-02-28",
+    "label": "Конфликт Зеленского и Трампа в Овальном кабинете",
+    "category": "diplomacy",
+    "post_count": 0,
+    "sources": [
+      "external"
+    ]
+  },
+  {
+    "date": "2025-03-09",
+    "label": "Бои в Курской области",
+    "category": "war",
+    "post_count": 8,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-03-28",
+    "label": "Переговоры о мире",
+    "category": "war",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-04-03",
+    "label": "Стратегия — Стрелков",
+    "category": "war",
+    "post_count": 4,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-04-08",
+    "label": "Переговоры — Трамп",
+    "category": "war",
+    "post_count": 5,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-04-10",
+    "label": "Дело генерала Попова",
+    "category": "internal",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-04-11",
+    "label": "Молодежь — Паша-техник",
+    "category": "war",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-04-21",
+    "label": "Пригожин и ЧВК Вагнер",
+    "category": "war",
+    "post_count": 4,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-04-27",
+    "label": "Бои в Курской области",
+    "category": "internal",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-05-24",
+    "label": "Переговоры о мире",
+    "category": "war",
+    "post_count": 12,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-05-26",
+    "label": "Бои в Курской области",
+    "category": "internal",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-06-01",
+    "label": "Военные объекты — Сталин",
+    "category": "internal",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-06-11",
+    "label": "Вооружение — Чемезов",
+    "category": "war",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-06-13",
+    "label": "Удары по Ирану",
+    "category": "war",
+    "post_count": 7,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-06-18",
+    "label": "Арест/суд: Полынков",
+    "category": "internal",
+    "post_count": 5,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-07-02",
+    "label": "Дипломатия — Алиев",
+    "category": "internal",
+    "post_count": 8,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-07-07",
+    "label": "Бои в Курской области",
+    "category": "war",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-07-11",
+    "label": "Военная авиация — Шалаева",
+    "category": "war",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-07-15",
+    "label": "Арест/суд: Полынков",
+    "category": "internal",
+    "post_count": 5,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-07-16",
+    "label": "Цензура — Пискарев",
+    "category": "internal",
+    "post_count": 4,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-07-23",
+    "label": "Законодательство — Максут Шадаев",
+    "category": "internal",
+    "post_count": 4,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-08-09",
+    "label": "Переговоры о мире",
+    "category": "diplomacy",
+    "post_count": 4,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-08-13",
+    "label": "Бои за Покровск",
+    "category": "war",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-08-14",
+    "label": "Цензура — Маматов",
+    "category": "internal",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-08-18",
+    "label": "Переговоры: с Украиной",
+    "category": "war",
+    "post_count": 11,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-08-24",
+    "label": "Бои за Купянск",
+    "category": "internal",
+    "post_count": 16,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-09-02",
+    "label": "Общественные настроения — Гурулев",
+    "category": "war",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-09-10",
+    "label": "Волонтерство — Алехин",
+    "category": "war",
+    "post_count": 4,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-09-12",
+    "label": "Нато — Трамп",
+    "category": "war",
+    "post_count": 5,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-09-17",
+    "label": "Русская община — Соловьев",
+    "category": "war",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-09-19",
+    "label": "Репрессии — Савва Федосеев",
+    "category": "internal",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-09-19",
+    "label": "Иностранные агенты — Роман Алехин",
+    "category": "war",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-09-24",
+    "label": "Переговоры — Трамп",
+    "category": "war",
+    "post_count": 5,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-09-29",
+    "label": "Тактика — Семен Пегов",
+    "category": "war",
+    "post_count": 4,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-10-13",
+    "label": "Конфликт вокруг Кадырова",
+    "category": "internal",
+    "post_count": 5,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-10-27",
+    "label": "Репрессии — Чадаев",
+    "category": "internal",
+    "post_count": 8,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-10-31",
+    "label": "Блокировка Телеграма",
+    "category": "war",
+    "post_count": 4,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-10-31",
+    "label": "Угрозы блокировки Telegram в России",
+    "category": "internal",
+    "post_count": 0,
+    "sources": [
+      "external"
+    ]
+  },
+  {
+    "date": "2025-11-16",
+    "label": "Информационная война — Владимир Соловьев",
+    "category": "war",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-11-24",
+    "label": "Переговоры — Стрелков",
+    "category": "war",
+    "post_count": 5,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-11-29",
+    "label": "Морские беспилотники",
+    "category": "war",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-12-08",
+    "label": "Бои за Купянск",
+    "category": "war",
+    "post_count": 39,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-12-08",
+    "label": "Переговоры — Трамп",
+    "category": "diplomacy",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-12-22",
+    "label": "Тактика — Сухраб Ахмедов",
+    "category": "war",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-12-22",
+    "label": "Конфликт вокруг Кадырова",
+    "category": "internal",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-12-25",
+    "label": "Бои за Купянск",
+    "category": "war",
+    "post_count": 7,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2025-12-30",
+    "label": "Дедовщина — Иванкевич",
+    "category": "war",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2026-01-03",
+    "label": "Кризис вокруг Венесуэлы",
+    "category": "diplomacy",
+    "post_count": 17,
+    "sources": [
+      "v1_clustering",
+      "external"
+    ]
+  },
+  {
+    "date": "2026-01-08",
+    "label": "Запад — Шойгу",
+    "category": "internal",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2026-01-20",
+    "label": "Переговоры: Путин—Трамп",
+    "category": "war",
+    "post_count": 20,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2026-01-24",
+    "label": "Бои за Купянск",
+    "category": "war",
+    "post_count": 6,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2026-01-29",
+    "label": "Переговоры о мире",
+    "category": "diplomacy",
+    "post_count": 6,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2026-02-04",
+    "label": "Арест/суд: Медведев",
+    "category": "internal",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2026-02-10",
+    "label": "Блокировка Telegram в России",
+    "category": "war",
+    "post_count": 31,
+    "sources": [
+      "v1_clustering",
+      "external"
+    ]
+  },
+  {
+    "date": "2026-02-20",
+    "label": "Блокировка Телеграма",
+    "category": "internal",
+    "post_count": 18,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2026-02-26",
+    "label": "Цензура — Кирилл Федоров",
+    "category": "internal",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2026-03-03",
+    "label": "Бои за Купянск",
+    "category": "war",
+    "post_count": 3,
+    "sources": [
+      "v1_clustering"
+    ]
+  },
+  {
+    "date": "2026-03-11",
+    "label": "Блокировка Телеграма",
+    "category": "internal",
+    "post_count": 24,
+    "sources": [
+      "v1_clustering"
+    ]
+  }
+]

@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Анализ настроений Z-блогеров</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #FAFAF8; color: #1a1a2e; font-family: 'Inter', -apple-system, sans-serif;
+         line-height: 1.6; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* Header */
+  header { padding: 24px 0 16px; text-align: center; }
+  header h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; color: #1a1a2e; }
+  header .subtitle { font-size: 13px; color: #9CA3AF; margin-top: 4px; font-weight: 400; }
+
+  /* Footer stats */
+  footer .stats { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;
+                   margin-bottom: 12px; }
+  footer .stat { font-size: 13px; color: #6B7280; }
+  footer .stat b { color: #374151; }
+
+  /* Sections */
+  section { padding: 48px 0; border-bottom: 1px solid #E5E5E0; }
+  section:last-child { border-bottom: none; }
+  section h2 { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+  section .desc { font-size: 14px; color: #6B7280; margin-bottom: 24px; }
+
+  /* Chart containers */
+  .chart { width: 100%; }
+
+  /* Events table */
+  .events-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .events-table th { text-align: left; padding: 12px 16px; border-bottom: 2px solid #E5E5E0;
+                      font-weight: 600; color: #6B7280; font-size: 11px;
+                      text-transform: uppercase; letter-spacing: 0.5px; }
+  .events-table td { padding: 12px 16px; border-bottom: 1px solid #F0F0EB; }
+  .events-table tr:hover { background: #F5F5F0; }
+  .v-badge { display: inline-block; padding: 2px 10px; border-radius: 12px;
+              font-weight: 600; font-size: 13px; min-width: 48px; text-align: center; }
+
+  /* Filter bar */
+  .filter-bar { position: sticky; top: 0; z-index: 100;
+                  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+                  padding: 12px 20px; background: rgba(255,255,255,0.95);
+                  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+                  border-bottom: 1px solid #E5E5E0; margin: 0 -24px; padding-left: 24px; padding-right: 24px; }
+  .filter-bar button { padding: 5px 14px; border: 1px solid #D1D5DB; border-radius: 6px;
+                         font-size: 13px; cursor: pointer; font-family: inherit;
+                         background: #fff; color: #374151; transition: all 0.15s; }
+  .filter-bar button:hover { background: #F5F5F0; }
+  .filter-bar button.active { background: #1a1a2e; color: #fff; border-color: #1a1a2e; }
+  .filter-info { font-size: 12px; color: #9CA3AF; }
+  .filter-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+
+  /* Range slider */
+  .range-track { position: relative; flex: 1; min-width: 250px; height: 32px; cursor: pointer;
+                   user-select: none; -webkit-user-select: none; }
+  .range-bg { position: absolute; top: 12px; left: 0; right: 0; height: 8px;
+                background: #E5E5E0; border-radius: 4px; }
+  .range-fill { position: absolute; top: 12px; height: 8px; background: #1a1a2e;
+                  border-radius: 4px; }
+  .range-handle { position: absolute; top: 6px; width: 20px; height: 20px;
+                    background: #fff; border: 2px solid #1a1a2e; border-radius: 50%;
+                    transform: translateX(-50%); cursor: grab; z-index: 2; }
+  .range-handle:active { cursor: grabbing; background: #F0F0EB; }
+  .range-labels { display: flex; justify-content: space-between;
+                    font-size: 11px; color: #9CA3AF; margin-top: 2px; }
+  .range-date { position: absolute; top: -16px; transform: translateX(-50%);
+                  font-size: 11px; color: #374151; white-space: nowrap; font-weight: 500; }
+
+  /* Custom legend */
+  .custom-legend { padding: 8px 0 0; }
+  .custom-legend.cols { display: grid; grid-template-rows: repeat(4, auto);
+                          grid-auto-flow: column; gap: 2px 32px; justify-content: start; }
+  .custom-legend.row { display: flex; justify-content: center; gap: 24px; }
+  .custom-legend .li { display: flex; align-items: center; gap: 6px; padding: 2px 0;
+                         font-size: 12px; color: #374151; white-space: nowrap; }
+  .custom-legend .sw { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
+
+  /* Sidebar drawer */
+  .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.25); z-index: 200;
+                       opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
+  .sidebar-overlay.visible { opacity: 1; pointer-events: auto; }
+  .sidebar { position: fixed; top: 0; right: 0; width: 540px; height: 100vh; z-index: 201;
+              background: #fff; border-left: 1px solid #E5E5E0; display: flex; flex-direction: column;
+              transform: translateX(100%); transition: transform 0.3s ease;
+              box-shadow: -4px 0 24px rgba(0,0,0,0.08); }
+  .sidebar.visible { transform: translateX(0); }
+  .sidebar.dragging { transition: none; }
+  .sidebar-head { display: flex; justify-content: space-between; align-items: center;
+                    padding: 12px 20px; border-bottom: 1px solid #E5E5E0; flex-shrink: 0; }
+  .sidebar-head h3 { font-size: 15px; font-weight: 600; margin: 0; flex: 1;
+                       overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sidebar-btn { cursor: pointer; background: none; border: none; font-size: 18px;
+                   color: #9CA3AF; padding: 4px 6px; line-height: 1; flex-shrink: 0; }
+  .sidebar-btn:hover { color: #374151; }
+
+  /* Resize handle */
+  .sidebar-resize { position: absolute; top: 0; left: -4px; width: 8px; height: 100%;
+                      cursor: col-resize; z-index: 5; }
+  .sidebar-resize::after { content: ''; position: absolute; top: 50%; left: 2px;
+                             width: 4px; height: 40px; transform: translateY(-50%);
+                             border-radius: 2px; background: #D1D5DB; opacity: 0;
+                             transition: opacity 0.2s; }
+  .sidebar-resize:hover::after { opacity: 1; }
+
+  /* Sidebar event list */
+  .sb-events { border-bottom: 1px solid #E5E5E0; max-height: 200px; overflow-y: auto;
+                 flex-shrink: 0; }
+  .sb-ev { display: flex; align-items: center; gap: 8px; padding: 6px 20px; cursor: pointer;
+             font-size: 12px; color: #6B7280; transition: background 0.1s; }
+  .sb-ev:hover { background: #F5F5F0; }
+  .sb-ev.active { background: #F0F0EB; color: #1a1a2e; font-weight: 500; }
+  .sb-ev-date { width: 70px; flex-shrink: 0; white-space: nowrap; }
+  .sb-ev-label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sb-ev-val { width: 40px; text-align: right; flex-shrink: 0; font-weight: 500; font-size: 11px; }
+
+  /* Sidebar content */
+  .sb-content { flex: 1; overflow-y: auto; padding: 16px 20px; }
+  .examples-tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+  .examples-tabs button { padding: 4px 12px; border: 1px solid #D1D5DB; border-radius: 4px;
+                            background: #fff; color: #374151; cursor: pointer; font-size: 12px;
+                            font-family: inherit; }
+  .examples-tabs button.active { background: #374151; color: #fff; border-color: #374151; }
+  .example-item { padding: 8px 12px; border-left: 3px solid #D1D5DB; margin-bottom: 8px;
+                    font-size: 13px; line-height: 1.5; color: #374151; }
+  .example-item .meta { font-size: 11px; color: #9CA3AF; margin-top: 2px; }
+  .example-item.neg { border-color: #EF4444; }
+  .example-item.neu { border-color: #9CA3AF; }
+  .example-item.pos { border-color: #22C55E; }
+
+  /* Header stats */
+  .header-stats { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
+                    margin-top: 8px; }
+  .header-stats .stat { font-size: 12px; color: #9CA3AF; }
+  .header-stats .stat b { color: #374151; }
+
+  /* Click hint */
+  .click-hint { font-size: 12px; color: #9CA3AF; font-style: italic; margin-top: 4px; }
+
+  /* Methodology */
+  .methodology { margin-top: 8px; }
+  .methodology summary { cursor: pointer; font-size: 13px; color: #6B7280;
+                           list-style: none; }
+  .methodology summary::-webkit-details-marker { display: none; }
+  .methodology summary::before { content: '▶ '; font-size: 10px; }
+  .methodology[open] summary::before { content: '▼ '; }
+  .methodology .content { font-size: 13px; color: #6B7280; line-height: 1.7; padding: 12px 0; }
+
+  /* Event category tag */
+  .cat-tag { display: inline-block; padding: 1px 8px; border-radius: 10px;
+              font-size: 11px; font-weight: 500; background: #F0F0EB; color: #6B7280; }
+
+  /* Channel divergence bars */
+  .ch-row { display: flex; align-items: center; gap: 8px; padding: 4px 0;
+             font-size: 13px; color: #374151; }
+  .ch-name { width: 130px; text-align: right; flex-shrink: 0; white-space: nowrap;
+              overflow: hidden; text-overflow: ellipsis; }
+  .ch-bar-wrap { flex: 1; position: relative; height: 20px; }
+  .ch-bar-bg { position: absolute; top: 9px; left: 0; right: 0; height: 2px;
+                background: #E5E5E0; }
+  .ch-bar-zero { position: absolute; top: 0; bottom: 0; width: 1px;
+                  background: #D1D5DB; }
+  .ch-bar { position: absolute; top: 4px; height: 12px; border-radius: 2px;
+             transition: width 0.3s ease; }
+  .ch-val { width: 44px; font-size: 12px; font-weight: 500; flex-shrink: 0; }
+
+  /* Clickable table rows */
+  .events-table tr { cursor: pointer; }
+  .events-table thead tr { cursor: default; }
+
+  footer { text-align: center; padding: 40px 0; color: #9CA3AF; font-size: 12px; }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .container { padding: 0 12px; }
+    header h1 { font-size: 20px; }
+    .filter-bar { flex-direction: column; gap: 8px; padding: 8px 12px; margin: 0 -12px; }
+    .range-track { min-width: 100%; }
+    .filter-right { margin-left: 0; justify-content: center; }
+    section { padding: 24px 0; }
+    section h2 { font-size: 17px; }
+    .events-table { display: block; overflow-x: auto; }
+    .header-stats { gap: 12px; }
+    .examples-tabs { flex-wrap: wrap; }
+    .sidebar { width: 100vw; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Анализ настроений Z-блогеров</h1>
+    <div class="subtitle">Динамика настроений провоенных российских Telegram-каналов на фоне ключевых событий</div>
+    <div class="header-stats" id="stats"></div>
+  </header>
+
+  <div class="filter-bar">
+    <div class="range-track" id="range-track">
+      <div class="range-bg"></div>
+      <div class="range-fill" id="range-fill"></div>
+      <div class="range-handle" id="handle-from"><span class="range-date" id="label-from"></span></div>
+      <div class="range-handle" id="handle-to"><span class="range-date" id="label-to"></span></div>
+    </div>
+    <div class="filter-right">
+      <button id="btn-all" class="active" onclick="resetFilter()">За все время</button>
+      <span class="filter-info" id="filter-info"></span>
+    </div>
+  </div>
+
+  <section>
+    <h2>Тональность по событиям</h2>
+    <div class="desc">Средняя тональность по каждому событию на временной оси. Ниже нуля = негатив, выше = позитив. Размер точки = число постов.<br><span class="click-hint">Кликните на точку для деталей.</span></div>
+    <div class="chart" id="timeline" style="height:420px;"></div>
+  </section>
+
+  <section>
+    <h2>Состав настроений</h2>
+    <div class="desc">Доля позитивных и негативных настроений по каждому событию. <span class="click-hint">Кликните на сегмент для примеров постов.</span></div>
+    <div style="margin-bottom:12px;">
+      <button id="btn-simple" onclick="showMoods('simple')" style="padding:6px 16px;border:1px solid #D1D5DB;border-radius:6px 0 0 6px;background:#1a1a2e;color:#fff;cursor:pointer;font-size:13px;">Простой</button><button id="btn-detail" onclick="showMoods('detail')" style="padding:6px 16px;border:1px solid #D1D5DB;border-left:none;border-radius:0 6px 6px 0;background:#fff;color:#374151;cursor:pointer;font-size:13px;">Детальный</button>
+    </div>
+    <div class="chart" id="moods" style="height:360px;"></div>
+    <div id="moods-legend" class="custom-legend"></div>
+  </section>
+
+  <section>
+    <h2>Карта эмоций</h2>
+    <div class="desc">Каждое событие на двух осях: тональность (хорошо/плохо) и интенсивность (спокойно/бурно). Размер точки = число постов. <span class="click-hint">Кликните на точку для разбивки по каналам.</span></div>
+    <div class="chart" id="scatter" style="height:400px;"></div>
+  </section>
+
+  <section>
+    <h2>События</h2>
+    <div class="desc">Ключевые события и их влияние на настроения. <span class="click-hint">Кликните на строку для деталей.</span></div>
+    <div id="events-table"></div>
+  </section>
+
+  <footer>
+    <details class="methodology">
+      <summary>Методология</summary>
+      <div class="content">
+        Посты собраны из открытых провоенных (Z) Telegram-каналов за ±3 дня вокруг каждого события.
+        Каждый пост проанализирован LLM (Gemini Flash) по шкалам тональности (−5..+5) и эмоциональной
+        интенсивности (0..5), с классификацией настроения по 10 категориям.
+        Учитываются только посты с релевантностью ≥ 0.5 к конкретному событию.
+        Примеры постов отбираются с порогом ≥ 0.7.
+        Анализ продолжается — данные обновляются по мере обработки новых событий.
+      </div>
+    </details>
+    <div style="margin-top:8px;">Прямой анализ постов Z-каналов через LLM</div>
+  </footer>
+</div>
+
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeExamples()"></div>
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-resize" id="sidebar-resize"></div>
+  <div class="sidebar-head">
+    <h3 id="sidebar-title">Детали события</h3>
+    <button class="sidebar-btn" onclick="closeExamples()" title="Закрыть">&times;</button>
+  </div>
+  <div id="sidebar-meta" style="padding:4px 20px 8px;border-bottom:1px solid #E5E5E0;"></div>
+  <div class="sb-events" id="sb-events"></div>
+  <div class="sb-content">
+    <div class="examples-tabs" id="examples-tabs"></div>
+    <div id="examples-list"></div>
+  </div>
+</div>
+
+<script>
+const DATA = {"summary": {"total_posts": 1722, "total_channels": 10, "total_events": 7, "date_from": "2023-03-28", "date_to": "2025-09-22", "valence_overall": -0.64, "arousal_overall": 1.73, "dominant_mood": "недовольство"}, "events_full": [{"event_date": "2023-03-31", "event_label": "Переговоры о мире", "category": "diplomacy", "post_count": 118, "total_posts": 904, "channel_count": 5, "valence_mean": -0.06, "valence_std": 2.29, "valence_min": -5, "valence_max": 5, "arousal_mean": 1.86, "arousal_std": 1.16, "mood_dominant": "недовольство", "mood_distribution": {"недовольство": 36, "сдержанный_оптимизм": 20, "нейтрально": 17, "оптимизм": 16, "тревога": 13, "агрессия": 6, "ярость": 5, "уныние": 3, "эйфория": 2}, "topics_top": ["украина_политика", "запад_нато", "переговоры_дипломатия", "пропаганда_медиа", "украина_потери"], "channel_valences": {"milinfolive": -0.33, "dva_majors": -0.22, "apwagner": 0.05, "zhivoff": 0.11, "romanov_92": 1}, "examples": {"neg": [{"text": "Итого. После визита к товарищу Со Си Батька ничего умнее не придумал, чем призвать к немедленному перемирию на Украине. Песков уже отреагировал, что на следующей неделе Пыпа и Батька обсудят этот вопрос. Так же Батька заявил, что никаких националистов на Украине нет. Фактически, это призыв к капитуляции.", "valence": -3, "mood": "недовольство", "channel": "apwagner"}, {"text": "Сегодня опять день куколд-дипломатии. Орбан говорит о перспективе введения миротворческих войск на Украину. Очевидный ответ России: сразу нет. Под видом миротворцев зайдут войска НАТО, и мы этих ублюдков из Киева никогда не выковыряем. На Украине уже есть миротворцы - это войска ВС РФ. Мы победим, и наступит мир.\n\nЛукашенко тоже отметился. Предложил установить немедленное перемирие без права...", "valence": -3, "mood": "недовольство", "channel": "zhivoff"}, {"text": "Фактически, Лукашенко призывает РФ со следующей недели объявить одностороннее перемирие и просто прекратить огонь по всей линии. Украине же и Западу он предлагает выставить ультиматум. Если Украина и Запад продолжат перемещать технику и вооружения и воспользуются этим жестом доброй воли со стороны РФ и опять обманут, вот тогда РФ и должна начать воевать по настоящему, с использованием фосфорных...", "valence": -3, "mood": "недовольство", "channel": "apwagner"}, {"text": "Усатый дегенерат, фактически, решил подыграть Украине и дать хохлам возможность в режиме прекращения огня спокойно подготовиться к контр-наступлению. Гениальный план. Абрамович одобряет.", "valence": -3, "mood": "недовольство", "channel": "apwagner"}, {"text": "Особенно мне понравился кусок: \"Они ранее уже обманывали. Но если они опять обманут, вот тогда!\". Это на кого вообще рассчитано? Дебил сам же заявляет, что прекрасно понимает чем все закончится, но при этом продвигает одностороннюю капитуляцию. И это как раз в то время когда Украина готовит контрнаступление. Конечно обманут, конечно прекращение огня поможет Украине гораздо легче решить...", "valence": -3, "mood": "недовольство", "channel": "apwagner"}], "neu": [], "pos": [{"text": "Я отвечу на чем базируется уверенность и этот тупой апломб. Мобилизационный потенциал, который гораздо больше, чем у хохлов, а в конечно итоге ведь все всегда упирается в людей. Второе - ядерное оружие, которое никто не отменял. И третье - довольно крепкая экономика, которая далека от рассказов о том, что все рухнуло и добрые русские люди едят ежей. Ну и внешняя политика в виде, какой никакой, но...", "valence": 1, "mood": "сдержанный_оптимизм", "channel": "apwagner"}, {"text": "Дмитрий Медведев о разговорах по поводу возможности ввода иностранных воинских континентов на Украину:\n\n\"...Они будут законной целью для наших Вооружённых сил, если разместятся на передовой без согласия России с оружием в руках и будут напрямую угрожать нам. И тогда эти «миротворцы» должны быть безжалостно уничтожены. Они солдаты врага. Они комбатанты, а не «писмейкеры»...\"\n\nЕщё много...", "valence": 1, "mood": "сдержанный_оптимизм", "channel": "dva_majors"}]}}, {"event_date": "2023-04-12", "event_label": "Репрессии — Стрелков", "category": "internal", "post_count": 89, "total_posts": 942, "channel_count": 5, "valence_mean": -0.73, "valence_std": 2.07, "valence_min": -5, "valence_max": 5, "arousal_mean": 1.58, "arousal_std": 1.02, "mood_dominant": "недовольство", "mood_distribution": {"недовольство": 46, "сдержанный_оптимизм": 16, "нейтрально": 6, "оптимизм": 5, "тревога": 4, "агрессия": 4, "уныние": 3, "эйфория": 2, "ярость": 2, "паника": 1}, "topics_top": ["репрессии_цензура", "внутренняя_политика", "пропаганда_медиа", "командование", "запад_нато"], "channel_valences": {"romanov_92": -1.33, "zhivoff": -1.3, "apwagner": -0.7, "dva_majors": -0.47, "milinfolive": -0.33}, "examples": {"neg": [{"text": "А вот как арестовывали нашего правдоруба. Даже не представляю сколько ему теперь дадут лет тюрьмы. Наверное, как Треповой.", "valence": -3, "mood": "уныние", "channel": "apwagner"}, {"text": "Стрелков:\n\nУважаемые читатели! Что касается сообщений о выдвинутых против меня обвинениях - то я еще никаких официальных бумаг из органов МВД не получал и, поэтому, комментировать ,в общем, пока и нечего. Пока могу только сказать, что - независимо от дальнейших действий властей - буду вести себя, говорить, поступать точно также, как вел себя до настоящего момента. Никаких изменений в риторие \"не...", "valence": -2, "mood": "недовольство", "channel": "dva_majors"}, {"text": "Один военачальник решил довести до всех, что мы – ЦИПСО. Вражеское, разумеется, ЦИПСО.\n\nНо если мы вражеское ЦИПСО, то зачем тогда гласно и негласно помогаем Армии России? Если мы вражеское ЦИПСО, то почему мы не указываем прямо сейчас фамилию этого военачальника?\n\nВидимо, мы вражеское ЦИПСО, которое воюет против Украины.\n\nНо если мы воюем против Украины, то мы не вражеское ЦИСПО, так...", "valence": -2, "mood": "недовольство", "channel": "dva_majors"}, {"text": "Дело Евича становится лакмусовой бумажкой в определении свой/чужой. Как может Юрий Евич, с которым мы воевали в соседних окопах, получивший в СВО медаль \"За отвагу\", дискредитировать СВО? Разве не может участник СВО рассказать о своем опыте, ошибках командования и других недостатках в ходе боевых действий? \nНасквозь гнилые турбоохранители, торгующие лояльностью, накинулись на Евича, который 9 лет...", "valence": -3, "mood": "недовольство", "channel": "dva_majors"}, {"text": "Второй канал я так понял мой. Прощайте.", "valence": -3, "mood": "уныние", "channel": "apwagner"}], "neu": [{"text": "То о чем я и говорил. Управление.", "valence": -1, "mood": "нейтрально", "channel": "apwagner"}], "pos": [{"text": "Не хорошо ведь, а радостно.", "valence": 3, "mood": "оптимизм", "channel": "apwagner"}, {"text": "Это просто прекрасно. Смеялся", "valence": 5, "mood": "эйфория", "channel": "apwagner"}, {"text": "Обратите внимание, что Толя теперь открыто позиционирует себя сексотом ГУР. Напоминает Гордона после интервью со Стрелковым, который сказал, что является агентом СБУ и был на задании, чтобы передать заветную флешку в Гаагу. Толик стал таким же дешевым клоуном, как и те кого он высмеивал ранее. Это успех.", "valence": 2, "mood": "оптимизм", "channel": "apwagner"}]}}, {"event_date": "2023-04-25", "event_label": "Пригожин и ЧВК Вагнер", "category": "war", "post_count": 100, "total_posts": 719, "channel_count": 5, "valence_mean": 0.12, "valence_std": 2.08, "valence_min": -5, "valence_max": 5, "arousal_mean": 1.6, "arousal_std": 1.02, "mood_dominant": "сдержанный_оптимизм", "mood_distribution": {"сдержанный_оптимизм": 30, "недовольство": 26, "нейтрально": 15, "оптимизм": 14, "тревога": 3, "агрессия": 3, "уныние": 3, "эйфория": 2, "ярость": 2, "паника": 1}, "topics_top": ["донбасс", "фронт_наступление", "командование", "внутренняя_политика", "пропаганда_медиа"], "channel_valences": {"zhivoff": -1, "dva_majors": -0.35, "romanov_92": 0, "apwagner": 0.25, "milinfolive": 0.69}, "examples": {"neg": [{"text": "❗️\"Ни одного пленного больше не брать\" — руководитель ЧВК \"Вагнер\" Евгений Пригожин сообщил, что отныне бойцы ЧВК будут уничтожать всех украинских солдат на поле боя. \n\nЗаявление было сделано Пригожиным на фоне публикации радиоперехвата ВСУ, где обсуждается расстрел попавшего к ним в плен раненого бойца ЧВК \"Вагнер\".  \n\n@milinfolive", "valence": -2, "mood": "агрессия", "channel": "milinfolive"}, {"text": "Самый перспективный политик принял решение не брать в плен хохлов. Сделал он это после прослушивания аудио перехвата о том, что хохлы добили раненого музыканта. Судя по всему эпоха гуманизма  все.", "valence": 2, "mood": "агрессия", "channel": "apwagner"}, {"text": "А вот и крайне трезвая и реальная оценка от самого перспективного политика по поводу настоящей ситуации на фронте. Как обычно, от министерства парадов и отступлений ни помощи, ни достижений ждать не приходится. Все позитивные заявления по поводу взаимодействия ЧВК \"Вагнер\" и Минобороны были сделаны в рамках выравнивания информационного фона и далеки от реальности.", "valence": -2, "mood": "недовольство", "channel": "apwagner"}, {"text": "Желтая обезьяна нас продал. А ведь я предупреждал. Когда узнал не мог целый день в это поверить. Поэтому и не писал ничего. Руки дрожали.", "valence": -4, "mood": "уныние", "channel": "apwagner"}, {"text": "ЧВК \"Вагнер\" про помощь от товарищей из других ЧВК. При первой же опасности они в истерике убежали и бросили позиции. Все точно так же как было и в Киевской области, Харьковской и так далее. Причина провала СВО в полной небоеспособности ВС РФ и уже вот таких новых \"ЧВК\", которые пытаются создать для подражания самому перспективному политику.", "valence": -3, "mood": "недовольство", "channel": "apwagner"}], "neu": [{"text": "На днях противником было опубликовано видео нанесения ударов по позициям ЧВК \"Вагнер\" в городской черте Бахмута.\n\nУкраинскими и некоторыми отечественными каналами стала распространяться информация, что данный удар является доказательством применения ВСУ американских планирующих высокоточных авиабомб JDAM-ER. \n\nОднако, это не так. В один из моментом съемки на 0:12 секунде отчетливо виден момент...", "valence": 0, "mood": "нейтрально", "channel": "milinfolive"}, {"text": "Канал Государственной пограничной службы Украины (машинный перевод)\n\nК вопросу об обещаниях пленных украинских военных больше не служить\n\nПригожин недавно сказал ЧВК \"Вагнер\" больше не брать пленных. \n\nДва майора", "valence": 0, "mood": "нейтрально", "channel": "dva_majors"}, {"text": "#1530 Публикуем запрос от редакции издания «Аргументы недели» и ответ:\nУважаемый Евгений Викторович!\nВ сети распространяется много различной информации о сроках предполагаемого наступления ВСУ. Хотели бы узнать Ваше мнение, какова сейчас реальная обстановка на фронте? Также скажите, пожалуйста, как сейчас складывается ситуация с боеприпасами для бойцов ЧВК «Вагнер»?\n\nПубликуем аудиокомментарий...", "valence": 0, "mood": "нейтрально", "channel": "dva_majors"}], "pos": [{"text": "Командир Азiва с позывным \"Костыль\" уничтожен музыкантами в Артемовске. Это не с ипотечниками и пятисотыми в зарницу играть. Теперь то все по настоящему. И сразу же результат другой. Да и тирамису почему то никто уже не предлагает.", "valence": 3, "mood": "оптимизм", "channel": "apwagner"}, {"text": "Осталось три километра и Артемовск окончательно все. Быть добру!", "valence": 3, "mood": "оптимизм", "channel": "apwagner"}, {"text": "🇷🇺⚔️🇺🇦ЧВК «Вагнер» взяла вокзал и прорвала оборону ВСУ вдоль железной дороги\n\n▪️Появились первые кадры, подтверждающие, что вокзал не просто под нашим контролем, но враг существенно отброшен от него, что позволило производить съемку у здания.\n▪️ЧВК наступает из центра к западу, зачистив территорию отеля \"Транзит\" и отбросив ВСУ от занимаемых позиций вдоль ж/д дороги у вокзала Бахмут-2.\nТем...", "valence": 3, "mood": "оптимизм", "channel": "romanov_92"}, {"text": "Интервью с одним из командиров ЧВК \"Вагнер\", который ведет штурм Артемовска. Обратите внимание на трофейное шампанское на окне. Теперь вкус этого шампанского будет забыт хохлами навсегда. Быть добру!", "valence": 3, "mood": "оптимизм", "channel": "apwagner"}, {"text": "А вот и один из подвалов, в котором сидит хохол в Артемовске. Тактика со времен Мариуполя не меняется. Главное сидеть в подвале и тянуть время. Но ничего. Работа идет и закончится все так же, как в Мариуполе. Подвальных крыс - зачистят. Быть добру!", "valence": 3, "mood": "оптимизм", "channel": "apwagner"}]}}, {"event_date": "2024-08-07", "event_label": "Вторжение ВСУ в Курскую область", "category": "unknown", "post_count": 988, "total_posts": 1517, "channel_count": 10, "valence_mean": -0.87, "valence_std": 1.76, "valence_min": -5, "valence_max": 5, "arousal_mean": 1.84, "arousal_std": 1.04, "mood_dominant": "тревога", "mood_distribution": {"тревога": 332, "недовольство": 212, "нейтрально": 174, "сдержанный_оптимизм": 168, "оптимизм": 39, "ярость": 29, "агрессия": 17, "уныние": 8, "паника": 6, "эйфория": 3}, "topics_top": ["курское_направление", "фронт_наступление", "тактика_стратегия", "артиллерия_обстрелы", "командование"], "channel_valences": {"philologist_zov": -2.09, "romanov_92": -1.94, "akashevarova": -1.83, "apwagner": -1.61, "zhivoff": -0.96, "voenkorKotenok": -0.9, "Alekhin_Telega": -0.63, "dva_majors": -0.53, "milinfolive": -0.5, "vault8pro": -0.44}, "examples": {"neg": [{"text": "07.08.2024\nКурская область, Россия.\n\nПротивник продвинулся на территорию Российской Федерации на глубину в 10 километров и на ширину в 15 километров по фронту. И продолжает продвижение. \n\nСитуация как пишут все наши упоротые - действительно под контролем. Но под контролем противника.\n\nВесь мир сейчас наблюдает,э за тем, что вооруженное вторжение на территорию Российской Федерации не влечет за...", "valence": -5, "mood": "паника", "channel": "romanov_92"}, {"text": "Одна из самых больших насосных газораспределительных станций в Европе - Суджа перешла под контроль ВСУ. Пол пути до Курской АЭС пройдено. Сам город Суджа уже эвакуирован. Командование на месте приняло решение сдавать его хохлам.", "valence": -5, "mood": "паника", "channel": "apwagner"}, {"text": "Суджа оккупирована. В город хохлы вошли сразу с нескольких сторон, предварительно взяв его в клещи. Сопротивления никто не оказывал ибо гарнизона там как такового и не было. Это какой-то позор!", "valence": -5, "mood": "паника", "channel": "apwagner"}, {"text": "40 наших пограничников сдались в плен на КПП Суджа.", "valence": -5, "mood": "паника", "channel": "apwagner"}, {"text": "Наши срочники, которых мудрый политик бросил под танки. В плену.", "valence": -5, "mood": "паника", "channel": "apwagner"}], "neu": [{"text": "Курская область\n\nНа фоне массированных ударов противника БПЛА самолётного типа, сегодня утром 4 танка противника подошли к границе у Суджанского района, один был сожжён FPV-дроном. Идут артиллерийские дуэли. \n\n✨На фоне резкой интенсификации обстановки распространяются эмоциональные сообщения наших военнослужащих. Тем не менее, с мест пишут, что речь о прорыве границы не идёт. \n\nРанее противник...", "valence": 0, "mood": "нейтрально", "channel": "dva_majors"}, {"text": "Курская область\n\nИдут бои на нескольких участках Государственной границы. Противник на одном из узких участков фронта малой группой перешёл границу на несколько сотен метров, остановлен, уничтожается. Обстановка контролируемая. Согласно разведданным, Киев решил устроить медийную картинку по аналогии с весенними событиями в Белгородской области, так что скоро появятся тик-токерные подразделения...", "valence": 0, "mood": "нейтрально", "channel": "dva_majors"}, {"text": "Курская область\n\nПротивник устроил серьезную артподготовку, на границе идут бои. Враг планирует нарастить давление, наши готовы. \n\nДва майора", "valence": 0, "mood": "нейтрально", "channel": "dva_majors"}, {"text": "⚡️Сегодня из Суджанского и Кореневского районов поступает информация о попытках прорыва ВСУ на территорию Курской области\n\nБойцы Пограничной службы ФСБ России и Вооруженных Сил РФ не допустили прорыва границы, - сообщил врио губернатора Алексей Смирнов.\n\nОн предупредил, что в ближайшие часы будет появляться много различных информационных вбросов и попросил доверять официальным и проверенным...", "valence": 0, "mood": "нейтрально", "channel": "Alekhin_Telega"}, {"text": "⚡️Сегодня из Суджанского и Кореневского районов поступает информация о попытках прорыва ВСУ на территорию Курской области. Бойцы Пограничной службы ФСБ России и Вооруженных Сил РФ не допустили прорыва границы. \n\nХочу предупредить о том, что в ближайшие часы будет появляться много различных информационных вбросов. Убедительно прошу доверять официальным источникам информации и не поддаваться на...", "valence": 0, "mood": "нейтрально", "channel": "dva_majors"}], "pos": [{"text": "Разнесли колонну всушников  у Курской области. Не туда поехали ))) Около 8 единиц техники уничтожено рядом.", "valence": 3, "mood": "оптимизм", "channel": "dva_majors"}, {"text": "Уничтожение украинского ЗРК \"Бук-М1\", использовавшегося противником для прикрытия своей попытки прорыва в Курской области. Видео: @The_Wrong_Side\n\nВ результате первого удара кассетным боеприпасом у \"Бука\" самопроизвольно запустились и сдетонировали обе зенитные ракеты (одна из которых прямо на ходу). \n\nПосле чего самоходная огневая установка попыталась скрыться среди растительности, где ее...", "valence": 3, "mood": "оптимизм", "channel": "milinfolive"}, {"text": "Нашим доблестным летчикам, которые сейчас вытягивают ситуацию на Курском фронте низкий поклон и двух ангелов на плечи. Парни, все на Вас. Храни Бог русских летчиков-истребителей!\n\nЖИВОВZ", "valence": 3, "mood": "оптимизм", "channel": "zhivoff"}, {"text": "Начинал противник операцию с 300 боевиками и 20 бронемашинами. За сутки уничтожили 660 боевиков и  82 бронемашины. Продолжаю следить за сводками Минобороны дальше.", "valence": 3, "mood": "оптимизм", "channel": "apwagner"}, {"text": "Группа СпН «Аид» вступила в боевые действия у райцентра Суджа Курской области.\n\nПрямым попаданием уничтожен пикап с десантом укронацистов.\n\nСпецподразделения действуют в райцентре, зайдя с разных направлений, что стало неожиданностью для противника.\n\n@voenkorKotenok", "valence": 3, "mood": "оптимизм", "channel": "voenkorKotenok"}]}}, {"event_date": "2024-10-09", "event_label": "Блокировка Discord", "category": "unknown", "post_count": 63, "total_posts": 1076, "channel_count": 8, "valence_mean": -1.05, "valence_std": 1.53, "valence_min": -3, "valence_max": 3, "arousal_mean": 1.51, "arousal_std": 0.78, "mood_dominant": "недовольство", "mood_distribution": {"недовольство": 39, "сдержанный_оптимизм": 12, "тревога": 7, "нейтрально": 4, "оптимизм": 1}, "topics_top": ["репрессии_цензура", "рэб_связь", "пропаганда_медиа", "бпла_дроны", "запад_нато"], "channel_valences": {"zhivoff": -2.38, "voenkorKotenok": -2, "philologist_zov": -1.67, "vault8pro": -1.5, "dva_majors": -0.88, "apwagner": -0.76, "milinfolive": -0.29, "Alekhin_Telega": 0}, "examples": {"neg": [{"text": "Несмотря на призывы обратиться к здравому смыслу, по требованию \"Роскомнадзора\" все же заблокировали Discord.\n\nНапомним, что данный мессенджер активно используется в войсках для боевого управления.\n\nСхождение с ума РКН и людей, продвигающих такие идеи, продолжается.\n\nВоенный Осведомитель", "valence": -3, "mood": "недовольство", "channel": "milinfolive"}, {"text": "Братец, знаешь, что меня ещё поражает в работе чиновников сегодня? Скорость реакции. \n\nТо есть, решением заблокировать в России \"Дискорд\" гражданские чиновники нанесли урон фронту, из-за чего, скорее всего, увеличились потери среди наших бойцов и техники, им это начали объяснять все, но вот конец рабочего дня и пора домой, да и инструкций никаких не поступило. \n\nИ плевать на фронт, плевать на...", "valence": -3, "mood": "недовольство", "channel": "Alekhin_Telega"}, {"text": "Роскомнадзор однозначно сыграл за хохлов со своей блокировкой Дискорда. Ударило по трансляциям «птичников». \n\nВыход найден, но сам факт — государственный орган ударил в спину армии.\n\nА любимый мессенджер «паркетных» военных — Whatsapp — работает, как работал) Чтобы утечки на сервера хохлов (а сервера для трафика на Россию стоят на Украине) продолжались.\n\nЧто там с выполнением ваших целей СВО в...", "valence": -3, "mood": "недовольство", "channel": "vault8pro"}, {"text": "Критику блокировки Дискорда активно качаем мы, российские военные. Которым ваше ведомство сорвало работу по обеспечению трансляций с камер беспилотников нашему командованию.", "valence": -3, "mood": "недовольство", "channel": "vault8pro"}, {"text": "Касательно ситуации с Discord, если кто не видел, рекомендую достаточно содержательные для общего понимания посты Макса Каскада и Александра Соцкого.\n\nПри этом в очередной раз и официозная медийка не подвела, и официальные лица порадовали.\n\nПоистине прекрасен следующий пассаж от главы Комитета Госдумы по обороне Андрея Картаполова:\n\n\"Я с Discord нигде не сталкивался. И люди, с которыми я общаюсь,...", "valence": -3, "mood": "недовольство", "channel": "philologist_zov"}], "neu": [{"text": "Друзья, \n\nСо вчерашнего дня из-за частичной блокировки Discord резко возрос объем запросов по организации альтернативной трансляции с коммерческих дронов. \n\nНе найдя конструктивной информации по решению этой задачи среди эмоциональных реакций в Telegram, мы вместе с Андреем Филатовым @filatovcorr решили подготовить краткую инструкцию по тому, как организовать трансляцию видео с коммерческих...", "valence": 0, "mood": "нейтрально", "channel": "vault8pro"}, {"text": "Наиболее полная обзорка на ситуацию с Дискордом в армии, мне не придётся писать то же самое другими словами 👇\n\nТот случай, когда человек не на СВО, но верно собрал информацию и обобщил. Зачёт.", "valence": 0, "mood": "нейтрально", "channel": "vault8pro"}], "pos": [{"text": "«По имеющейся информации, критику блокировки Discord активно качают украинские блогеры и паблики. Это указывает на то, что украинские силовики и западные спецслужбы использовали его в своих целях и отслеживали действия наших военных. Поэтому важно рассматривать действия Роскомнадзора через призму безопасности и соблюдения российского законодательства», — заявил СоловьёвLive член комитета Госдумы...", "valence": 1, "mood": "сдержанный_оптимизм", "channel": "vault8pro"}, {"text": "По поводу мнения о том, что с осени начнутся переговоры (с представителями блока НАТО) есть разные точки зрения. Конечно, есть много тех, кто их очень хочет. Но есть и те, кто читал басню Крылова, которую он отправил Кутузову в то время, когда Наполеон предложил провести переговоры. Кутузов зачитал эту басню перед своими офицерами: \n\nВолк ночью, думая залезть в овчарню,\nПопал на псарню.\nПоднялся...", "valence": 1, "mood": "сдержанный_оптимизм", "channel": "Alekhin_Telega"}, {"text": "Ничего. Изобретете. Уверен, что все это так или иначе изучали специальные отделы в ЦРУ. Что неудивительно учитывая, что этот сервис создан калифорнийской компанией, где и находится их штаб-квартира. К чему приводит использование сервисов противника в таком серьезном деле как война достаточно посмотреть на лидера ХАМАС, которого выследили и уничтожили с помощью WhatsApp. Быть добру!", "valence": 1, "mood": "сдержанный_оптимизм", "channel": "apwagner"}, {"text": "Парни подняли альтернативу Discord. Функционал тот же. Тестят трансляции.", "valence": 1, "mood": "сдержанный_оптимизм", "channel": "apwagner"}, {"text": "Читая некоторые публикации из околовоенных телеграмм-каналов складывается впечатление, что это какая-то особая форма извращения — «большая колонна ВСУ бежит из Курской области в направлении Сум».\n\nОтличная шутка, но вернемся в реальность. Пока некоторые авторы из головы берут информацию, в Курской области идет планомерная работа по выкуриванию врага. Причем сопротивляется враг со всей силы и...", "valence": 1, "mood": "сдержанный_оптимизм", "channel": "dva_majors"}]}}, {"event_date": "2025-01-20", "event_label": "Переговоры: Путин—Трамп", "category": "unknown", "post_count": 172, "total_posts": 1136, "channel_count": 8, "valence_mean": -0.16, "valence_std": 2.05, "valence_min": -5, "valence_max": 5, "arousal_mean": 1.51, "arousal_std": 1.01, "mood_dominant": "сдержанный_оптимизм", "mood_distribution": {"сдержанный_оптимизм": 51, "недовольство": 46, "нейтрально": 24, "тревога": 21, "оптимизм": 20, "паника": 4, "эйфория": 3, "ярость": 1, "агрессия": 1, "уныние": 1}, "topics_top": ["переговоры_дипломатия", "запад_нато", "украина_политика", "пропаганда_медиа", "внутренняя_политика"], "channel_valences": {"romanov_92": -1.6, "Alekhin_Telega": -1.17, "akashevarova": -1, "voenkorKotenok": -0.71, "zhivoff": -0.62, "dva_majors": -0.12, "milinfolive": 0, "apwagner": 0.33}, "examples": {"neg": [{"text": "22.01.2025\nВашингтон, США.\n\nПолный текст требования Трампа остановить ВС России продвижение в/на Украине:\n\nЯ не хочу причинять боль России. Я люблю русский народ, и у меня всегда были очень хорошие отношения с президентом Путиным - и это несмотря на то, что радикальные левые говорят о России, России, России. \n\nМы никогда не должны забывать, что Россия помогла нам выиграть Вторую мировую войну,...", "valence": -3, "mood": "тревога", "channel": "romanov_92"}, {"text": "Москва поздравляет бульдозера американской политики со вступлением в должность и открыта для диалога с новой администрацией США по украинскому конфликту, заявил Пыпа. А по-другому и быть не могло. Без выклянчивания переговоров никуда.", "valence": -2, "mood": "недовольство", "channel": "apwagner"}, {"text": "Ну вот и все. Расходимся. Трамп поручил спецпосланнику США по Украине Киту Келлогу завершить украинский конфликт за 100 дней. А разговоров-то было.", "valence": -2, "mood": "недовольство", "channel": "apwagner"}, {"text": "Трамп призвал Россию завершить СВО, пригрозив в противном случае ввести новые санкции и пошлины на весь российский экспорт в США. Можно было бы не обращать внимания на эти смешные угрозы, но учитывая что мудрый политик зачем-то продолжает инвестировать деньги в американские ценные бумаги, то возможно действительно все что угодно. События развиваются стремительно. И это только начало.", "valence": -2, "mood": "тревога", "channel": "apwagner"}, {"text": "Трамп поставил России новый ультиматум. \n\nНа этот раз он заявил, что если Кремль не пойдет на сделку по Украине, то будут введены налоги, санкции и пошлины на все, что Россия продает США и другим странам.\n\nЖИВОВZ", "valence": -2, "mood": "недовольство", "channel": "zhivoff"}], "neu": [{"text": "Пара мыслей на фоне распространяемых в европейской прессе в последние дни нарративов о подготовке к размещению британских и французских солдат на Украине, имевших место быть учений французского спецназа на этот случай и прочего. \n\nХотим отметить, что на наш взгляд, целью данных публикаций является, скорее всего, дискредитация якобы идущей работы над заключением мирного соглашения, тиражируемой, в...", "valence": 0, "mood": "нейтрально", "channel": "milinfolive"}, {"text": "На связи печальная лошадка Лаврушка. В урегулировании украинского кризиса речь может идти только о надежных юридически обязывающих договоренностях с закреплением в них механизма невозможности их нарушения.", "valence": 0, "mood": "нейтрально", "channel": "apwagner"}, {"text": "Прием \"Женское платье\" из периода Троецарствия (3 век н.э.) и заявление Трампа\n\nСыма И (выдающийся китайский полководец) еще раз напомнил свое распоряжение — выжидать и ни в коем случае в бой не выходить. А Чжугэ Лян (величайший стратег и полководец), расположившись с войском в Учжанъюане, наоборот, приказал непрерывно вызывать противника в бой. Но вэйцы не откликались. Тогда Чжугэ Лян уложил в...", "valence": 0, "mood": "нейтрально", "channel": "Alekhin_Telega"}, {"text": "Не валяй дурака, Америка! Трамп хамит. У Путина выдержка железная. Пусть Трамп предложит нормальные договоренности. Зачем в эфир-то выдавать такое, строить из себя мачо?, заявил депутат ГД Андрей Колесник.", "valence": 0, "mood": "нейтрально", "channel": "apwagner"}, {"text": "Миллионы солдат убиты, они все лежат на полях, миллионы русских, миллионы украинцев. Время остановиться, заявил Трамп.", "valence": 0, "mood": "нейтрально", "channel": "apwagner"}], "pos": [{"text": "Пазл сложился. Быть добру!", "valence": 3, "mood": "оптимизм", "channel": "apwagner"}, {"text": "21.01.2025\n\nПрезидент США Дональд Трамп подписал указ о приостановке на 90 дней всех программ помощи США другим странам.\n\nТрамп также заявил о подготовке встречи с президентом РФ.\n\n@romanov_92", "valence": 2, "mood": "сдержанный_оптимизм", "channel": "romanov_92"}, {"text": "Ультиматум Трампа отвергнут. Быть добру!", "valence": 2, "mood": "сдержанный_оптимизм", "channel": "apwagner"}, {"text": "💬 \"Уступать американцам не надо\" – Москва в случае переговоров с Трампом должна стоять на своем.  \n\nТакое мнение РИА Новости Крым политолог, военный волонтер, автор ТГ-канала \"ЖИВОВ Z\" Алексей Живов. \n\nОн считает, что с избранным президентом США можно и даже нужно встретиться, поговорить и обсудить позиции друг друга, но не поступаясь нашими интересами. \n\n\"Не стоит рассчитывать на то, что новая...", "valence": 1, "mood": "сдержанный_оптимизм", "channel": "zhivoff"}, {"text": "Зеленский согласен на начало переговоров с РФ, заявил советник Трампа по нацбезопасности Майк Уолц. А разговоров-то было.", "valence": 1, "mood": "сдержанный_оптимизм", "channel": "apwagner"}]}}, {"event_date": "2025-09-19", "event_label": "Репрессии — Савва Федосеев", "category": "internal", "post_count": 192, "total_posts": 941, "channel_count": 10, "valence_mean": -0.44, "valence_std": 1.98, "valence_min": -5, "valence_max": 3, "arousal_mean": 1.54, "arousal_std": 0.84, "mood_dominant": "недовольство", "mood_distribution": {"недовольство": 65, "сдержанный_оптимизм": 40, "тревога": 31, "нейтрально": 25, "оптимизм": 21, "агрессия": 5, "уныние": 3, "паника": 1, "эйфория": 1}, "topics_top": ["репрессии_цензура", "внутренняя_политика", "украина_политика", "бпла_дроны", "артиллерия_обстрелы"], "channel_valences": {"akashevarova": -3, "Alekhin_Telega": -2.57, "philologist_zov": -2, "vault8pro": -2, "romanov_92": -1, "dva_majors": -0.78, "zhivoff": -0.46, "voenkorKotenok": -0.24, "milinfolive": -0.14, "apwagner": 0.09}, "examples": {"neg": [{"text": "А это уже страшно\n\nНет, не за меня, а за народ да и страну. Когда люди успели превратиться в стадо овец, которых гонит лживый журналист - хоть на стрижку, хоть на убой? \n\nВедь не просто отключено уже критическое мышление у многих, но даже уже не задают вопросы: а покажите или докажите документами. Сфабриковали видео, где текстом подвели к нужной мысли - поверили. Сказали о накрашенных ногтях на...", "valence": -3, "mood": "недовольство", "channel": "Alekhin_Telega"}, {"text": "Говорит, что церемониться с такими как он не нужно. Любит когда пожестче. Быть добру!", "valence": 3, "mood": "агрессия", "channel": "apwagner"}, {"text": "НАСТОЯЩИЙ МАТЕРИАЛ (ИНФОРМАЦИЯ) ПРОИЗВЕДЕН И (ИЛИ) РАСПРОСТРАНЕН ИНОСТРАННЫМ АГЕНТОМ АЛЕХИНЫМ РОМАНОМ ЮРЬЕВИЧЕМ ЛИБО КАСАЕТСЯ ДЕЯТЕЛЬНОСТИ ИНОСТРАННОГО АГЕНТА АЛЕХИНА РОМАНА ЮРЬЕВИЧА 18+\n\nИтак, что такое статус иноагента.\n\n\"Под иностранным агентом понимается лицо, получившее поддержку и (или) находящееся под иностранным влиянием в иных формах и осуществляющее деятельность, виды которой...", "valence": -3, "mood": "недовольство", "channel": "Alekhin_Telega"}, {"text": "И тут как гром среди ясного неба. Военблогер и сборщик гуманитарки Роман Алёхин признан иноагентом, заявили в Минюсте РФ. Может сглазил кто? Каюсь, виноват. Оранжевый Зикр меня буквально добил. Продолжаю работу. Быть добру!", "valence": -2, "mood": "недовольство", "channel": "apwagner"}, {"text": "Результат оказался предсказуем и офицеры предали и забыли главнокомандующего уже через неделю после ареста. Вот и делай после этого людям добро.", "valence": -2, "mood": "недовольство", "channel": "apwagner"}], "neu": [{"text": "Российские суды почти за три года рассмотрели более 20 тысяч уголовных дел о самовольном оставлении части (СОЧ), неисполнении приказа и дезертирстве.\n\nКак пишут прозападные журналисты, собравшие публичные данные с сайтов российских судов, с октября 2023 года по конец мая 2025 года распределение следующее:\n\n▪️Самовольное оставлении части (статья 337 УК РФ) - 18 159 дел; \n▪️Неисполнение приказа...", "valence": 0, "mood": "нейтрально", "channel": "milinfolive"}, {"text": "Зеленский заявил, что никто не рассматривает «корейскую» или другие модели. \n\nМожет случиться так, что не будет финального документа об окончании войны, заявил он.  \n\nОтметим, что по результатам Корейской войны как раз и не было подписано итоговое мирное соглашение. То есть, Зеленский фактический предлагает тот самый «Корейский сценарий» с отсутствием юридически закрепленного мира, но не понимает...", "valence": 0, "mood": "нейтрально", "channel": "milinfolive"}, {"text": "Глава МИД Польши Сикорский опосредованно пригрозил России сбивать дроны, ракеты и самолеты, нарушающие воздушное пространство НАТО. \n\n\"Если очередная ракета или другой объект влетит в наше пространство, намеренно или случайно, и будет сбит, а обломки упадут на территорию НАТО, не приходите сюда жаловаться. Вас предупредили\", - заявил Сикорский на Совбезе ООН.\n\nВоенный Осведомитель", "valence": 0, "mood": "нейтрально", "channel": "milinfolive"}], "pos": [{"text": "Зафиксировали на ребе Поздмана. Быть добру!", "valence": 3, "mood": "оптимизм", "channel": "apwagner"}, {"text": "Для тех кого раздражал вот этот кусочек в ДНР. Наконец-то его зачистили и освободили. Быть добру!", "valence": 3, "mood": "оптимизм", "channel": "apwagner"}, {"text": "Лавров заявил, что Украина отвергла предложения, которые спецпредставитель США Уиткофф передал ей по результатам встречи Трампа и Путина на Аляске. Быть добру!", "valence": 2, "mood": "оптимизм", "channel": "apwagner"}, {"text": "Казахстан готов стать площадкой для российско-украинских переговоров, сообщил зампредседателя комитета по международным делам, обороне и безопасности мажилиса Казахстана Айдос Сарым. Быть добру!", "valence": 1, "mood": "сдержанный_оптимизм", "channel": "apwagner"}, {"text": "Заместитель главы администрации президента, еврей Козак и ничтожная подстилка хохлов отправлен в отставку. Кстати, перед началом СВО он всячески пытался отговорить Пыпу от начала боевых действий, но у него ничего не получалось. И вот на четвертый год СВО Пыпа наконец-то понял какую змею пригрел. Скатертью по жопе. Быть добру!", "valence": 3, "mood": "эйфория", "channel": "apwagner"}]}}], "channels": [{"channel": "dva_majors", "valence_mean": -0.5, "arousal_mean": 1.63, "post_count": 538, "valence_std": 1.71, "mention_count": 375}, {"channel": "apwagner", "valence_mean": -0.55, "arousal_mean": 1.83, "post_count": 471, "valence_std": 2.27, "mention_count": 289}, {"channel": "milinfolive", "valence_mean": -0.32, "arousal_mean": 1.27, "post_count": 211, "valence_std": 1.58, "mention_count": 403}, {"channel": "zhivoff", "valence_mean": -0.91, "arousal_mean": 1.94, "post_count": 175, "valence_std": 1.93, "mention_count": 224}, {"channel": "voenkorKotenok", "valence_mean": -0.82, "arousal_mean": 1.78, "post_count": 138, "valence_std": 1.62, "mention_count": 170}, {"channel": "Alekhin_Telega", "valence_mean": -0.89, "arousal_mean": 1.95, "post_count": 79, "valence_std": 1.89, "mention_count": 170}, {"channel": "romanov_92", "valence_mean": -1.33, "arousal_mean": 2.06, "post_count": 54, "valence_std": 1.87, "mention_count": 213}, {"channel": "vault8pro", "valence_mean": -1.21, "arousal_mean": 1.88, "post_count": 24, "valence_std": 2.02, "mention_count": 189}, {"channel": "philologist_zov", "valence_mean": -2, "arousal_mean": 2.06, "post_count": 17, "valence_std": 1.41, "mention_count": 176}, {"channel": "akashevarova", "valence_mean": -1.8, "arousal_mean": 3, "post_count": 15, "valence_std": 1.97, "mention_count": 175}], "moods_order": ["паника", "уныние", "тревога", "недовольство", "ярость", "агрессия", "нейтрально", "сдержанный_оптимизм", "оптимизм", "эйфория"]};
+const MOOD_COLORS = {"\u043f\u0430\u043d\u0438\u043a\u0430": "#DC2626", "\u0443\u043d\u044b\u043d\u0438\u0435": "#9333EA", "\u0442\u0440\u0435\u0432\u043e\u0433\u0430": "#EA580C", "\u043d\u0435\u0434\u043e\u0432\u043e\u043b\u044c\u0441\u0442\u0432\u043e": "#D97706", "\u044f\u0440\u043e\u0441\u0442\u044c": "#BE123C", "\u0430\u0433\u0440\u0435\u0441\u0441\u0438\u044f": "#E11D48", "\u043d\u0435\u0439\u0442\u0440\u0430\u043b\u044c\u043d\u043e": "#6B7280", "\u0441\u0434\u0435\u0440\u0436\u0430\u043d\u043d\u044b\u0439_\u043e\u043f\u0442\u0438\u043c\u0438\u0437\u043c": "#0891B2", "\u043e\u043f\u0442\u0438\u043c\u0438\u0437\u043c": "#059669", "\u044d\u0439\u0444\u043e\u0440\u0438\u044f": "#16A34A"};
+
+// === Utilities ===
+function escapeHtml(s) {
+  const div = document.createElement('div');
+  div.textContent = s;
+  return div.innerHTML;
+}
+
+const NEG_COLOR = '#EF4444';
+const NEU_COLOR = '#9CA3AF';
+const POS_COLOR = '#22C55E';
+const CAT_LABELS_RU = { military: 'военные', politics: 'политика', internal: 'внутренние',
+  diplomacy: 'дипломатия', repression: 'репрессии', society: 'общество', tech: 'технологии', unknown: '' };
+
+const MONTH_SHORT = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+function formatDateRu(d) {
+  const dt = new Date(d);
+  return dt.getDate() + ' ' + MONTH_SHORT[dt.getMonth()] + ' ' + dt.getFullYear();
+}
+
+// === Stats (header) ===
+function pluralize(n, one, few, many) {
+  const abs = Math.abs(n) % 100;
+  const last = abs % 10;
+  if (abs > 10 && abs < 20) return many;
+  if (last === 1) return one;
+  if (last >= 2 && last <= 4) return few;
+  return many;
+}
+(function() {
+  const s = DATA.summary;
+  const dateRange = s.date_from && s.date_to
+    ? `<div class="stat">${formatDateRu(s.date_from)} — ${formatDateRu(s.date_to)}</div>` : '';
+  document.getElementById('stats').innerHTML =
+    `<div class="stat"><b>${s.total_posts.toLocaleString()}</b> ${pluralize(s.total_posts, 'пост', 'поста', 'постов')}</div>` +
+    `<div class="stat"><b>${s.total_channels}</b> ${pluralize(s.total_channels, 'канал', 'канала', 'каналов')}</div>` +
+    `<div class="stat"><b>${s.total_events}</b> ${pluralize(s.total_events, 'событие', 'события', 'событий')}</div>` +
+    dateRange;
+})();
+
+// === Shared filter logic ===
+const MAX_EVENTS = 15;
+const NEG_MOODS = ['паника','уныние','тревога','недовольство','ярость','агрессия'];
+const POS_MOODS = ['сдержанный_оптимизм','оптимизм','эйфория'];
+let currentMoodMode = 'simple';
+let tableSortCol = 'date';
+let tableSortAsc = true;
+
+// --- Range slider state ---
+const allDates = DATA.events_full.map(e => e.event_date).sort();
+const DATE_MIN = allDates[0];
+const DATE_MAX = allDates[allDates.length - 1];
+// Convert date string to days since DATE_MIN
+function dateToDays(d) {
+  return Math.round((new Date(d) - new Date(DATE_MIN)) / 86400000);
+}
+function daysToDate(days) {
+  const d = new Date(DATE_MIN);
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+const TOTAL_DAYS = dateToDays(DATE_MAX);
+let rangeFrom = 0;        // 0 = DATE_MIN
+let rangeTo = TOTAL_DAYS;  // max = DATE_MAX
+let isFullRange = true;
+
+function updateSliderUI() {
+  const track = document.getElementById('range-track');
+  const w = track.offsetWidth;
+  const pFrom = w > 0 ? (rangeFrom / TOTAL_DAYS) * 100 : 0;
+  const pTo = w > 0 ? (rangeTo / TOTAL_DAYS) * 100 : 100;
+  document.getElementById('handle-from').style.left = pFrom + '%';
+  document.getElementById('handle-to').style.left = pTo + '%';
+  document.getElementById('range-fill').style.left = pFrom + '%';
+  document.getElementById('range-fill').style.width = (pTo - pFrom) + '%';
+  document.getElementById('label-from').textContent = formatDateRu(daysToDate(rangeFrom));
+  document.getElementById('label-to').textContent = formatDateRu(daysToDate(rangeTo));
+  const btnAll = document.getElementById('btn-all');
+  if (isFullRange) {
+    btnAll.classList.add('active');
+  } else {
+    btnAll.classList.remove('active');
+  }
+}
+
+// --- Drag logic ---
+(function() {
+  const track = document.getElementById('range-track');
+  const hFrom = document.getElementById('handle-from');
+  const hTo = document.getElementById('handle-to');
+  let dragging = null;
+
+  function pxToDays(clientX) {
+    const rect = track.getBoundingClientRect();
+    const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    return Math.round(ratio * TOTAL_DAYS);
+  }
+
+  function onStart(handle, e) {
+    e.preventDefault();
+    dragging = handle;
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onEnd);
+    document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('touchend', onEnd);
+  }
+  function onMove(e) {
+    if (!dragging) return;
+    e.preventDefault();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const days = pxToDays(clientX);
+    if (dragging === 'from') {
+      rangeFrom = Math.min(days, rangeTo - 1);
+      rangeFrom = Math.max(0, rangeFrom);
+    } else {
+      rangeTo = Math.max(days, rangeFrom + 1);
+      rangeTo = Math.min(TOTAL_DAYS, rangeTo);
+    }
+    isFullRange = (rangeFrom === 0 && rangeTo === TOTAL_DAYS);
+    updateSliderUI();
+    updateCharts();
+  }
+  function onEnd() {
+    dragging = null;
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onEnd);
+    document.removeEventListener('touchmove', onMove);
+    document.removeEventListener('touchend', onEnd);
+  }
+
+  hFrom.addEventListener('mousedown', (e) => onStart('from', e));
+  hFrom.addEventListener('touchstart', (e) => onStart('from', e), { passive: false });
+  hTo.addEventListener('mousedown', (e) => onStart('to', e));
+  hTo.addEventListener('touchstart', (e) => onStart('to', e), { passive: false });
+})();
+
+function getFilteredEvents() {
+  const fromDate = daysToDate(rangeFrom);
+  const toDate = daysToDate(rangeTo);
+  let evts = DATA.events_full.slice();
+  if (!isFullRange) {
+    evts = evts.filter(e => e.event_date >= fromDate && e.event_date <= toDate);
+  }
+  const total = evts.length;
+  if (evts.length > MAX_EVENTS) {
+    evts.sort((a,b) => b.post_count - a.post_count);
+    evts = evts.slice(0, MAX_EVENTS);
+  }
+  evts.sort((a,b) => a.event_date.localeCompare(b.event_date));
+  return { evts, total };
+}
+
+function updateCharts() {
+  const { evts, total } = getFilteredEvents();
+  const info = document.getElementById('filter-info');
+  if (total > MAX_EVENTS) {
+    info.textContent = `топ ${evts.length} из ${total}`;
+  } else {
+    info.textContent = `${total} ${pluralize(total, 'событие', 'события', 'событий')}`;
+  }
+  renderTimeline(evts);
+  renderMoods(currentMoodMode, evts);
+  renderScatter(evts);
+  renderEventsTable();
+}
+
+function resetFilter() {
+  rangeFrom = 0;
+  rangeTo = TOTAL_DAYS;
+  isFullRange = true;
+  updateSliderUI();
+  updateCharts();
+}
+
+function showMoods(mode) {
+  currentMoodMode = mode;
+  const btnS = document.getElementById('btn-simple');
+  const btnD = document.getElementById('btn-detail');
+  if (mode === 'simple') {
+    btnS.style.background = '#1a1a2e'; btnS.style.color = '#fff';
+    btnD.style.background = '#fff'; btnD.style.color = '#374151';
+  } else {
+    btnD.style.background = '#1a1a2e'; btnD.style.color = '#fff';
+    btnS.style.background = '#fff'; btnS.style.color = '#374151';
+  }
+  updateCharts();
+}
+
+// === Timeline renderer ===
+function vColor(v) {
+  if (v <= -1) return '#DC2626';
+  if (v < -0.3) return '#EA580C';
+  if (v < 0.3) return '#6B7280';
+  if (v < 1) return '#0891B2';
+  return '#059669';
+}
+
+function renderTimeline(evts) {
+  const vals = evts.map(e => e.valence_mean || 0);
+  const arousals = evts.map(e => e.arousal_mean || 0);
+  const posts = evts.map(e => e.post_count);
+  const moods = evts.map(e => e.mood_dominant || '—');
+  const dates = evts.map(e => e.event_date);
+  const maxPosts = Math.max(...posts, 1);
+
+  const shapes = evts.map((e, i) => ({
+    type: 'line', x0: dates[i], x1: dates[i], y0: 0, y1: vals[i],
+    line: { color: vColor(vals[i]), width: 3 },
+  }));
+
+  const traces = [{
+    x: dates, y: vals,
+    mode: 'markers+text',
+    marker: {
+      size: posts.map(p => 12 + (p / maxPosts) * 28),
+      color: vals.map(v => vColor(v)),
+      line: { width: 2, color: '#fff' }, opacity: 0.9,
+    },
+    text: evts.map(e => e.event_label.length > 25 ? e.event_label.slice(0, 23) + '…' : e.event_label),
+    textposition: vals.map(v => v >= 0 ? 'top center' : 'bottom center'),
+    textfont: { size: 11, color: '#374151' },
+    customdata: evts.map((e, i) => [e.event_label, posts[i], moods[i], arousals[i].toFixed(1)]),
+    hovertemplate: '<b>%{customdata[0]}</b><br>Дата: %{x}<br>Тональность: %{y:+.2f}<br>Интенсивность: %{customdata[3]}<br>Настроение: %{customdata[2]}<br>Постов: %{customdata[1]}<extra></extra>',
+    showlegend: false,
+  }];
+
+  document.getElementById('timeline').style.height = '400px';
+
+  const layout = {
+    paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',
+    yaxis: {
+      range: [-1.5, 1.5], zeroline: true, zerolinecolor: '#D1D5DB', zerolinewidth: 1.5,
+      gridcolor: '#F0F0EB', tickvals: [-1, -0.5, 0, 0.5, 1],
+      ticktext: ['негатив', '', 'нейтрально', '', 'позитив'],
+      title: { text: 'тональность', font: { size: 12, color: '#9CA3AF' } },
+    },
+    xaxis: {
+      type: 'date', gridcolor: '#F0F0EB', tickfont: { size: 11 },
+      tickformat: '%b %Y',
+    },
+    margin: { t: 30, r: 20, b: 50, l: 90 },
+    shapes: [
+      ...shapes,
+      { type: 'rect', xref: 'paper', yref: 'y', x0: 0, x1: 1, y0: -1.5, y1: 0,
+         fillcolor: 'rgba(220,38,38,0.04)', line: { width: 0 } },
+      { type: 'rect', xref: 'paper', yref: 'y', x0: 0, x1: 1, y0: 0, y1: 1.5,
+         fillcolor: 'rgba(5,150,105,0.04)', line: { width: 0 } },
+    ],
+  };
+  Plotly.newPlot('timeline', traces, layout, { responsive: true, displayModeBar: false });
+  document.getElementById('timeline').on('plotly_click', function(cd) {
+    if (!cd || !cd.points || !cd.points[0]) return;
+    showExamples(cd.points[0].customdata[0], 'channels');
+  });
+}
+
+// === Moods renderer ===
+function renderMoods(mode, evts) {
+  const labels = evts.map(e => e.event_label);
+  const totals = evts.map(e => {
+    const d = e.mood_distribution || {};
+    return Object.values(d).reduce((s, v) => s + v, 0) || 1;
+  });
+
+  let traces;
+  if (mode === 'simple') {
+    const neg = evts.map(e => {
+      const d = e.mood_distribution || {};
+      return NEG_MOODS.reduce((s, m) => s + (d[m] || 0), 0);
+    });
+    const neu = evts.map(e => (e.mood_distribution || {})['нейтрально'] || 0);
+    const pos = evts.map(e => {
+      const d = e.mood_distribution || {};
+      return POS_MOODS.reduce((s, m) => s + (d[m] || 0), 0);
+    });
+    const negPct = neg.map((v,i) => Math.round(v/totals[i]*100));
+    const neuPct = neu.map((v,i) => Math.round(v/totals[i]*100));
+    const posPct = pos.map((v,i) => Math.round(v/totals[i]*100));
+    traces = [
+      { y: labels, x: neg, name: 'Негатив', type: 'bar', orientation: 'h',
+         marker: { color: NEG_COLOR }, opacity: 0.85,
+         text: negPct.map(p => p >= 8 ? p+'%' : ''), textposition: 'inside',
+         textfont: { color: '#fff', size: 12 },
+         hovertemplate: '<b>%{y}</b><br>Негатив: %{x} постов (%{text})<extra></extra>' },
+      { y: labels, x: neu, name: 'Нейтрально', type: 'bar', orientation: 'h',
+         marker: { color: NEU_COLOR }, opacity: 0.7,
+         text: neuPct.map(p => p >= 8 ? p+'%' : ''), textposition: 'inside',
+         textfont: { color: '#fff', size: 12 },
+         hovertemplate: '<b>%{y}</b><br>Нейтрально: %{x} постов (%{text})<extra></extra>' },
+      { y: labels, x: pos, name: 'Позитив', type: 'bar', orientation: 'h',
+         marker: { color: POS_COLOR }, opacity: 0.85,
+         text: posPct.map(p => p >= 8 ? p+'%' : ''), textposition: 'inside',
+         textfont: { color: '#fff', size: 12 },
+         hovertemplate: '<b>%{y}</b><br>Позитив: %{x} постов (%{text})<extra></extra>' },
+    ];
+  } else {
+    traces = DATA.moods_order.map(mood => {
+      const vals = evts.map(e => (e.mood_distribution || {})[mood] || 0);
+      const pcts = vals.map((v,i) => Math.round(v/totals[i]*100));
+      return {
+        y: labels, x: vals, name: mood, type: 'bar', orientation: 'h',
+        marker: { color: MOOD_COLORS[mood] }, opacity: 0.85,
+        text: pcts.map(p => p >= 12 ? p+'%' : ''), textposition: 'inside',
+        textfont: { color: '#fff', size: 11 },
+        hovertemplate: `<b>%{y}</b><br>${mood}: %{x} постов (%{text})<extra></extra>`,
+      };
+    });
+  }
+
+  const h = Math.max(250, evts.length * 40 + 60);
+  document.getElementById('moods').style.height = h + 'px';
+
+  const layout = {
+    paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',
+    barmode: 'stack', showlegend: false,
+    yaxis: { automargin: true, tickfont: { size: 11 }, ticksuffix: '  ' },
+    xaxis: { gridcolor: '#F0F0EB' },
+    margin: { t: 10, r: 20, b: 20, l: 10 },
+  };
+  Plotly.newPlot('moods', traces, layout, { responsive: true, displayModeBar: false });
+  attachMoodsClick();
+
+  // Custom legend
+  const leg = document.getElementById('moods-legend');
+  if (mode === 'detail') {
+    const order = DATA.moods_order.slice().reverse();
+    leg.className = 'custom-legend cols';
+    leg.innerHTML = order.map(m =>
+      `<div class="li"><span class="sw" style="background:${MOOD_COLORS[m]}"></span>${m}</div>`
+    ).join('');
+  } else {
+    const items = [
+      ['Негатив',NEG_COLOR], ['Нейтрально',NEU_COLOR], ['Позитив',POS_COLOR]
+    ];
+    leg.className = 'custom-legend row';
+    leg.innerHTML = items.map(([n,c]) =>
+      `<div class="li"><span class="sw" style="background:${c}"></span>${n}</div>`
+    ).join('');
+  }
+}
+
+// === Examples panel ===
+const CAT_LABELS = { neg: 'Негатив', neu: 'Нейтрально', pos: 'Позитив', channels: 'Каналы' };
+const CAT_COLORS = { neg: NEG_COLOR, neu: NEU_COLOR, pos: POS_COLOR };
+const ALL_TABS = ['neg', 'neu', 'pos', 'channels'];
+let currentExamplesEvent = null;
+let currentExamplesCat = null;
+
+function showExamples(eventLabel, cat) {
+  const ev = DATA.events_full.find(e => e.event_label === eventLabel);
+  if (!ev) return;
+
+  currentExamplesEvent = eventLabel;
+  currentExamplesCat = cat || 'neg';
+
+  document.getElementById('sidebar-title').textContent = eventLabel;
+
+  // Show topics + date
+  const topicsEl = document.getElementById('sidebar-meta');
+  const topics = (ev.topics_top || []).slice(0, 4);
+  const topicsHtml = topics.map(t => `<span class="cat-tag">${t}</span>`).join(' ');
+  const dateStr = formatDateRu(ev.event_date);
+  const catLabel = CAT_LABELS_RU[ev.category] || '';
+  topicsEl.innerHTML = `<span style="color:#6B7280;font-size:12px;">${dateStr}${catLabel ? ' &middot; ' + catLabel : ''}</span>` +
+    (topicsHtml ? `<div style="margin-top:4px;">${topicsHtml}</div>` : '') +
+    `<div style="margin-top:4px;font-size:11px;color:#9CA3AF;">Тональность от −5 (паника) до +5 (эйфория)</div>`;
+
+  // Render event list
+  renderSidebarEvents();
+
+  // Render tabs
+  const tabs = document.getElementById('examples-tabs');
+  tabs.innerHTML = ALL_TABS.map(c => {
+    let label;
+    if (c === 'channels') {
+      const n = Object.keys(ev.channel_valences || {}).length;
+      label = `${CAT_LABELS[c]} (${n})`;
+    } else {
+      label = `${CAT_LABELS[c]} (${(ev.examples && ev.examples[c] || []).length})`;
+    }
+    const active = c === currentExamplesCat ? 'active' : '';
+    return `<button class="${active}" onclick="switchExampleTab('${c}')">${label}</button>`;
+  }).join('');
+
+  renderExamplesList(ev, currentExamplesCat);
+
+  document.getElementById('sidebar').classList.add('visible');
+  document.getElementById('sidebar-overlay').classList.add('visible');
+}
+
+function renderSidebarEvents() {
+  const { evts } = getFilteredEvents();
+  const container = document.getElementById('sb-events');
+  container.innerHTML = evts.map(e => {
+    const active = e.event_label === currentExamplesEvent ? 'active' : '';
+    const v = e.valence_mean != null ? (e.valence_mean > 0 ? '+' : '') + e.valence_mean.toFixed(1) : '';
+    const vColor = (e.valence_mean || 0) < -0.3 ? '#991B1B' : (e.valence_mean || 0) > 0.3 ? '#166534' : '#6B7280';
+    const lbl = e.event_label.replace(/'/g, "\'");
+    return `<div class="sb-ev ${active}" onclick="selectSidebarEvent('${lbl}')">
+      <span class="sb-ev-date">${formatDateRu(e.event_date)}</span>
+      <span class="sb-ev-label">${escapeHtml(e.event_label)}</span>
+      <span class="sb-ev-val" style="color:${vColor}">${v}</span>
+    </div>`;
+  }).join('');
+  // Scroll active into view
+  const activeEl = container.querySelector('.sb-ev.active');
+  if (activeEl) activeEl.scrollIntoView({ block: 'nearest' });
+}
+
+function selectSidebarEvent(eventLabel) {
+  showExamples(eventLabel, currentExamplesCat);
+}
+
+function switchExampleTab(cat) {
+  currentExamplesCat = cat;
+  const ev = DATA.events_full.find(e => e.event_label === currentExamplesEvent);
+  if (!ev) return;
+
+  document.querySelectorAll('#examples-tabs button').forEach(b => b.classList.remove('active'));
+  const buttons = document.querySelectorAll('#examples-tabs button');
+  const idx = ALL_TABS.indexOf(cat);
+  if (buttons[idx]) buttons[idx].classList.add('active');
+
+  renderExamplesList(ev, cat);
+}
+
+function renderExamplesList(ev, cat) {
+  const list = document.getElementById('examples-list');
+
+  if (cat === 'channels') {
+    renderChannelDivergence(ev, list);
+    return;
+  }
+
+  const items = (ev.examples && ev.examples[cat]) || [];
+  if (items.length === 0) {
+    list.innerHTML = '<div style="color:#9CA3AF;font-size:13px;padding:8px;">Нет примеров для этой категории</div>';
+    return;
+  }
+  list.innerHTML = items.map(item => {
+    const vSign = item.valence > 0 ? '+' : '';
+    return `<div class="example-item ${cat}">
+      <div>${escapeHtml(item.text)}</div>
+      <div class="meta">${escapeHtml(item.channel)} &middot; ${escapeHtml(item.mood)} &middot; тональность: ${vSign}${item.valence}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderChannelDivergence(ev, container) {
+  const cv = ev.channel_valences || {};
+  const entries = Object.entries(cv).sort((a,b) => a[1] - b[1]);
+  if (entries.length === 0) {
+    container.innerHTML = '<div style="color:#9CA3AF;font-size:13px;padding:8px;">Нет данных по каналам</div>';
+    return;
+  }
+  // Build channel meta lookup
+  const chMeta = {};
+  (DATA.channels || []).forEach(c => { chMeta[c.channel] = c; });
+
+  const maxAbs = Math.max(...entries.map(([,v]) => Math.abs(v)), 0.5);
+  const zeroPos = (maxAbs / (2 * maxAbs)) * 100;
+
+  let html = '<div style="padding:4px 0;">';
+  entries.forEach(([ch, v]) => {
+    const barColor = v < -0.3 ? NEG_COLOR : v > 0.3 ? POS_COLOR : NEU_COLOR;
+    const barWidth = (Math.abs(v) / maxAbs) * 50;
+    const isNeg = v < 0;
+    const barStyle = isNeg
+      ? `right:${zeroPos}%;width:${barWidth}%;background:${barColor};`
+      : `left:${zeroPos}%;width:${barWidth}%;background:${barColor};`;
+    const vStr = (v > 0 ? '+' : '') + v.toFixed(2);
+    const vc = v < -0.3 ? '#991B1B' : v > 0.3 ? '#166534' : '#6B7280';
+    const meta = chMeta[ch];
+    const mentions = meta && meta.mention_count ? `${meta.mention_count} упом.` : '';
+    html += `<div class="ch-row">
+      <div class="ch-name" title="${mentions}">${escapeHtml(ch)}</div>
+      <div class="ch-bar-wrap">
+        <div class="ch-bar-bg"></div>
+        <div class="ch-bar-zero" style="left:${zeroPos}%"></div>
+        <div class="ch-bar" style="${barStyle}"></div>
+      </div>
+      <div class="ch-val" style="color:${vc}">${vStr}</div>
+    </div>`;
+  });
+
+  const spread = entries[entries.length-1][1] - entries[0][1];
+  html += `<div style="margin-top:8px;font-size:12px;color:#9CA3AF;">Разброс: ${spread.toFixed(2)} &middot; ${entries.length} ${pluralize(entries.length, 'канал', 'канала', 'каналов')}</div>`;
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function closeExamples() {
+  document.getElementById('sidebar').classList.remove('visible');
+  document.getElementById('sidebar-overlay').classList.remove('visible');
+  currentExamplesEvent = null;
+}
+
+// --- Sidebar resize ---
+(function() {
+  const sb = document.getElementById('sidebar');
+  const handle = document.getElementById('sidebar-resize');
+  let startX, startW;
+
+  handle.addEventListener('mousedown', function(e) {
+    e.preventDefault();
+    startX = e.clientX;
+    startW = sb.offsetWidth;
+    sb.classList.add('dragging');
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onEnd);
+  });
+  handle.addEventListener('touchstart', function(e) {
+    startX = e.touches[0].clientX;
+    startW = sb.offsetWidth;
+    sb.classList.add('dragging');
+    document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('touchend', onEnd);
+  }, { passive: false });
+
+  function onMove(e) {
+    e.preventDefault();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const newW = Math.max(220, Math.min(window.innerWidth * 0.85, startW + (startX - clientX)));
+    sb.style.width = newW + 'px';
+  }
+  function onEnd() {
+    sb.classList.remove('dragging');
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onEnd);
+    document.removeEventListener('touchmove', onMove);
+    document.removeEventListener('touchend', onEnd);
+  }
+})();
+
+// Attach click handler to moods chart
+function attachMoodsClick() {
+  const moodsDiv = document.getElementById('moods');
+  moodsDiv.on('plotly_click', function(clickData) {
+    if (!clickData || !clickData.points || !clickData.points[0]) return;
+    const pt = clickData.points[0];
+    const eventLabel = pt.y;
+    const traceName = pt.data.name;
+
+    let cat = 'neg';
+    if (traceName === 'Нейтрально' || traceName === 'нейтрально') cat = 'neu';
+    else if (traceName === 'Позитив' || POS_MOODS.includes(traceName)) cat = 'pos';
+    else if (NEG_MOODS.includes(traceName)) cat = 'neg';
+
+    showExamples(eventLabel, cat);
+  });
+}
+
+// Initial render
+updateSliderUI();
+updateCharts();
+attachMoodsClick();
+
+// === Scatter valence × arousal ===
+function renderScatter(evts) {
+  const maxPosts = Math.max(...evts.map(e => e.post_count), 1);
+  const traces = [{
+    x: evts.map(e => e.valence_mean || 0),
+    y: evts.map(e => e.arousal_mean || 0),
+    mode: 'markers+text',
+    marker: {
+      size: evts.map(e => 14 + (e.post_count / maxPosts) * 30),
+      color: evts.map(e => vColor(e.valence_mean || 0)),
+      line: { width: 2, color: '#fff' }, opacity: 0.9,
+    },
+    text: evts.map(e => e.event_label.length > 20 ? e.event_label.slice(0, 18) + '…' : e.event_label),
+    textposition: 'top center',
+    textfont: { size: 10, color: '#374151' },
+    customdata: evts.map(e => [e.event_label, e.post_count, e.mood_dominant || '—',
+      (e.valence_mean > 0 ? '+' : '') + (e.valence_mean || 0).toFixed(2), (e.arousal_mean || 0).toFixed(1)]),
+    hovertemplate: '<b>%{customdata[0]}</b><br>Тональность: %{customdata[3]}<br>Интенсивность: %{customdata[4]}<br>Настроение: %{customdata[2]}<br>Постов: %{customdata[1]}<extra></extra>',
+    showlegend: false,
+  }];
+  const layout = {
+    paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',
+    xaxis: {
+      title: { text: 'Тональность', font: { size: 12, color: '#9CA3AF' } },
+      zeroline: true, zerolinecolor: '#D1D5DB', gridcolor: '#F0F0EB',
+      range: [Math.min(-1.5, ...evts.map(e => (e.valence_mean||0) - 0.3)),
+              Math.max(0.5, ...evts.map(e => (e.valence_mean||0) + 0.3))],
+    },
+    yaxis: {
+      title: { text: 'Интенсивность', font: { size: 12, color: '#9CA3AF' } },
+      zeroline: false, gridcolor: '#F0F0EB',
+      range: [Math.min(...evts.map(e => (e.arousal_mean||0))) - 0.15,
+              Math.max(...evts.map(e => (e.arousal_mean||0))) + 0.15],
+    },
+    margin: { t: 30, r: 20, b: 50, l: 60 },
+  };
+  Plotly.newPlot('scatter', traces, layout, { responsive: true, displayModeBar: false });
+  document.getElementById('scatter').on('plotly_click', function(cd) {
+    if (!cd || !cd.points || !cd.points[0]) return;
+    const label = cd.points[0].customdata[0];
+    showExamples(label, 'channels');
+  });
+}
+
+// === Events table (dynamic, filtered by slider) ===
+function badgeStyle(v) {
+  if (v < -0.5) return `background:${NEG_COLOR}22;color:#991B1B`;
+  if (v < 0.3) return `background:${NEU_COLOR}22;color:#6B7280`;
+  return `background:${POS_COLOR}22;color:#166534`;
+}
+
+function sortEvents(evts, col, asc) {
+  const cmp = (a, b) => {
+    let va, vb;
+    switch (col) {
+      case 'date': va = a.event_date; vb = b.event_date; break;
+      case 'valence': va = a.valence_mean || 0; vb = b.valence_mean || 0; break;
+      case 'arousal': va = a.arousal_mean || 0; vb = b.arousal_mean || 0; break;
+      case 'mood': va = a.mood_dominant || ''; vb = b.mood_dominant || ''; break;
+      case 'posts': va = a.post_count || 0; vb = b.post_count || 0; break;
+      default: va = a.event_label; vb = b.event_label;
+    }
+    if (va < vb) return asc ? -1 : 1;
+    if (va > vb) return asc ? 1 : -1;
+    return 0;
+  };
+  return evts.slice().sort(cmp);
+}
+
+function onTableSort(col) {
+  if (tableSortCol === col) {
+    tableSortAsc = !tableSortAsc;
+  } else {
+    tableSortCol = col;
+    tableSortAsc = col === 'date';
+  }
+  renderEventsTable();
+}
+
+function renderEventsTable() {
+  const { evts } = getFilteredEvents();
+  const sorted = sortEvents(evts, tableSortCol, tableSortAsc);
+  const arrow = (col) => tableSortCol === col ? (tableSortAsc ? ' ▲' : ' ▼') : '';
+  const cols = [
+    ['date', 'Дата'], ['event', 'Событие'], ['valence', 'Тональность'],
+    ['arousal', 'Интенсивность'], ['mood', 'Настроение'], ['posts', 'Постов']
+  ];
+  let html = `<table class="events-table"><thead><tr>`;
+  cols.forEach(([key, label]) => {
+    html += `<th style="cursor:pointer" onclick="onTableSort('${key}')">${label}${arrow(key)}</th>`;
+  });
+  html += `</tr></thead><tbody>`;
+  sorted.forEach(e => {
+    const v = e.valence_mean != null ? e.valence_mean.toFixed(1) : 'N/A';
+    const a = e.arousal_mean != null ? e.arousal_mean.toFixed(1) : 'N/A';
+    const cat = CAT_LABELS_RU[e.category] || '';
+    const catTag = cat ? ` <span class="cat-tag">${cat}</span>` : '';
+    const lbl = e.event_label.replace(/'/g, "\'");
+    html += `<tr onclick="showExamples('${lbl}', 'channels')">
+      <td style="white-space:nowrap">${formatDateRu(e.event_date)}</td>
+      <td>${e.event_label}${catTag}</td>
+      <td><span class="v-badge" style="${badgeStyle(e.valence_mean || 0)}">${v > 0 ? '+'+v : v}</span></td>
+      <td>${a}</td>
+      <td>${e.mood_dominant || '—'}</td>
+      <td>${e.post_count}</td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  document.getElementById('events-table').innerHTML = html;
+}
+renderEventsTable();
+</script>
+</body>
+</html>

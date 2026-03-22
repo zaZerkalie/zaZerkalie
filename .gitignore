@@ -1,0 +1,52 @@
+# Secrets
+.env
+credentials_ghpages.txt
+.mcp.json
+
+# Telegram
+data/tg_session.session
+data/result.json
+
+# Raw data with post texts (anonymity)
+data/posts_preprocessed.json
+data/z_posts_raw.json
+data/z_posts_checkpoint.json
+data/analysis_z_events.json
+data/analysis_full.json
+data/analysis_test.json
+data/model_comparison.json
+
+# Intermediate/v1 data
+data/events.json
+data/events_extracted.json
+
+# v1 outputs (not for publication)
+output/dashboard.html
+output/dashboard_data.json
+output/sentiment.html
+output/*.png
+output/few_shot_examples.md
+
+# MCP server (has client secrets)
+google-sheets-mcp/
+
+# Scripts (not for publication)
+scripts/
+docs/
+requirements.txt
+
+# Python
+__pycache__/
+*.pyc
+*.session
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude
+CLAUDE.md

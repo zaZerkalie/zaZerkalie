@@ -50,3 +50,15 @@ Thumbs.db
 
 # Claude
 CLAUDE.md
+.claude/
+data/backup_*/
+
+# Internal/working files
+RECOMMENDATIONS.md
+archive/
+data/analysis_z_results*.jsonl
+data/analysis_z_results*.bak_*.jsonl
+data/events_2022_draft.json
+data/label_mapping.json
+data/reclassified_*.jsonl
+data/situation_scores.jsonl

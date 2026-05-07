@@ -39,6 +39,7 @@ requirements.txt
 __pycache__/
 *.pyc
 *.session
+.venv/
 
 # IDE
 .vscode/

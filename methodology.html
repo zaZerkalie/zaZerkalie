@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Metodologia · Analiza nastrojów Z-blogerów</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #FAFAF8; color: #1a1a2e; font-family: 'Inter', -apple-system, sans-serif;
+         line-height: 1.6; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* Language switcher */
+  .lang-switch { position: absolute; top: 20px; right: 24px; display: flex;
+                  background: #fff; border: 1px solid #E5E5E0; border-radius: 999px;
+                  padding: 3px; gap: 0; z-index: 10; }
+  .lang-switch button { background: transparent; border: 0; cursor: pointer;
+                          font-family: inherit; font-size: 12px; font-weight: 600;
+                          color: #9CA3AF; padding: 6px 14px; border-radius: 999px;
+                          letter-spacing: 0.5px; transition: all 0.15s; }
+  .lang-switch button.active { background: #1a1a2e; color: #fff; }
+  .lang-switch button:not(.active):hover { color: #1a1a2e; }
+
+  body[data-lang="pl"] [lang="ru"] { display: none !important; }
+  body[data-lang="ru"] [lang="pl"] { display: none !important; }
+
+  header { padding: 56px 0 24px; text-align: center; position: relative; }
+  header .eyebrow { font-size: 12px; color: #9CA3AF; letter-spacing: 1.5px;
+                     text-transform: uppercase; font-weight: 500; margin-bottom: 10px; }
+  header h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; color: #1a1a2e; }
+  header .subtitle { font-size: 14px; color: #6B7280; margin-top: 8px; max-width: 720px;
+                       margin-left: auto; margin-right: auto; }
+
+  .top-stats { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;
+                 padding: 28px 0 12px; border-bottom: 1px solid #E5E5E0; }
+  .top-stat { text-align: center; }
+  .top-stat .num { font-size: 26px; font-weight: 700; color: #1a1a2e; }
+  .top-stat .lbl { font-size: 11px; color: #9CA3AF; text-transform: uppercase;
+                    letter-spacing: 0.5px; margin-top: 2px; }
+
+  section { padding: 44px 0; border-bottom: 1px solid #E5E5E0; }
+  section:last-of-type { border-bottom: none; }
+  .section-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+  .section-head .num { font-size: 13px; color: #9CA3AF; font-weight: 500;
+                         font-variant-numeric: tabular-nums; }
+  section h2 { font-size: 22px; font-weight: 600; letter-spacing: -0.3px; }
+  section .desc { font-size: 14px; color: #6B7280; margin-bottom: 24px; max-width: 760px; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  .card { background: #fff; border: 1px solid #E5E5E0; border-radius: 10px;
+          padding: 18px 20px; }
+  .card h3 { font-size: 14px; font-weight: 600; color: #1a1a2e; margin-bottom: 6px;
+              display: flex; align-items: center; gap: 8px; }
+  .card .marker { display: inline-block; width: 18px; height: 18px; border-radius: 50%;
+                    flex-shrink: 0; font-size: 11px; font-weight: 700;
+                    text-align: center; line-height: 18px; }
+  .marker.done { background: #DCFCE7; color: #15803D; }
+  .marker.work { background: #FEF3C7; color: #B45309; }
+  .marker.plan { background: #E0E7FF; color: #4338CA; }
+  .card p { font-size: 13px; color: #4B5563; line-height: 1.6; }
+  .card p + p { margin-top: 8px; }
+  .card ul { list-style: none; padding: 0; margin-top: 6px; }
+  .card li { font-size: 13px; color: #4B5563; padding: 3px 0 3px 14px; position: relative; }
+  .card li::before { content: '·'; position: absolute; left: 4px; color: #9CA3AF;
+                       font-weight: 700; }
+
+  .pipeline { background: #fff; border: 1px solid #E5E5E0; border-radius: 10px;
+              padding: 20px 24px; font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+              font-size: 12px; line-height: 1.8; color: #374151; overflow-x: auto;
+              white-space: pre; }
+  .pipeline .step { color: #1a1a2e; font-weight: 600; }
+  .pipeline .out { color: #6B7280; }
+  .pipeline .arrow { color: #9CA3AF; }
+
+  .cost-table { width: 100%; border-collapse: collapse; font-size: 14px;
+                  background: #fff; border: 1px solid #E5E5E0; border-radius: 10px;
+                  overflow: hidden; }
+  .cost-table th { text-align: left; padding: 12px 16px; background: #F5F5F0;
+                    font-weight: 600; color: #6B7280; font-size: 11px;
+                    text-transform: uppercase; letter-spacing: 0.5px;
+                    border-bottom: 1px solid #E5E5E0; }
+  .cost-table th.right, .cost-table td.right { text-align: right;
+                    font-variant-numeric: tabular-nums; }
+  .cost-table td { padding: 12px 16px; border-bottom: 1px solid #F0F0EB; color: #374151; }
+  .cost-table tr:last-child td { border-bottom: none; }
+  .cost-table tr.total td { background: #FAFAF8; font-weight: 600; color: #1a1a2e; }
+  .cost-table .sub { font-size: 12px; color: #9CA3AF; margin-top: 2px; }
+
+  .cost-split { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;
+                margin-bottom: 14px; }
+  .cost-card { background: #fff; border: 1px solid #E5E5E0; border-radius: 10px;
+                padding: 20px 22px; }
+  .cost-card .cost-label { font-size: 12px; color: #9CA3AF;
+                           text-transform: uppercase; letter-spacing: 0.5px;
+                           font-weight: 500; }
+  .cost-card .cost-val { font-size: 32px; font-weight: 700; color: #1a1a2e;
+                          margin-top: 8px; font-variant-numeric: tabular-nums; }
+  .cost-card .cost-unit { font-size: 13px; color: #6B7280; font-weight: 400;
+                           margin-left: 4px; }
+  .cost-card .cost-note { font-size: 12px; color: #6B7280; margin-top: 8px;
+                          line-height: 1.5; }
+
+  .note { font-size: 12px; color: #9CA3AF; margin-top: 14px; line-height: 1.6; }
+
+  footer { text-align: center; padding: 40px 0 56px; color: #9CA3AF; font-size: 12px; }
+
+  @media (max-width: 768px) {
+    .container { padding: 0 16px; }
+    header { padding: 32px 0 16px; }
+    header h1 { font-size: 24px; }
+    section { padding: 28px 0; }
+    section h2 { font-size: 18px; }
+    .grid, .cost-split { grid-template-columns: 1fr; }
+    .top-stats { gap: 24px; }
+    .top-stat .num { font-size: 22px; }
+    .lang-switch { top: 12px; right: 12px; }
+  }
+</style>
+</head>
+<body data-lang="pl">
+
+<div class="lang-switch">
+  <button id="btn-pl" class="active" onclick="setLang('pl')">PL</button>
+  <button id="btn-ru" onclick="setLang('ru')">RU</button>
+</div>
+
+<div class="container">
+
+  <header>
+    <div class="eyebrow">
+      <span lang="pl">Metodologia i status projektu</span>
+      <span lang="ru">Методология и статус проекта</span>
+    </div>
+    <h1>
+      <span lang="pl">Analiza nastrojów Z-blogerów</span>
+      <span lang="ru">Анализ настроений Z-блогеров</span>
+    </h1>
+    <div class="subtitle">
+      <span lang="pl">Jak prowojenny rosyjski Telegram reagował na kluczowe wydarzenia wojny.
+        Co zostało zrobione, co jest w toku, co jest planowane, i ile kosztuje utrzymanie projektu.</span>
+      <span lang="ru">Как провоенный российский Telegram реагировал на ключевые события войны.
+        Что сделано, что в процессе, что планируется, и сколько стоит поддерживать проект.</span>
+    </div>
+  </header>
+
+  <div class="top-stats">
+    <div class="top-stat">
+      <div class="num">29</div>
+      <div class="lbl"><span lang="pl">kanałów Z</span><span lang="ru">Z-каналов</span></div>
+    </div>
+    <div class="top-stat">
+      <div class="num">167</div>
+      <div class="lbl"><span lang="pl">wydarzeń</span><span lang="ru">событий</span></div>
+    </div>
+    <div class="top-stat">
+      <div class="num">468K</div>
+      <div class="lbl"><span lang="pl">pobranych postów</span><span lang="ru">постов собрано</span></div>
+    </div>
+    <div class="top-stat">
+      <div class="num">457K</div>
+      <div class="lbl"><span lang="pl">przeanalizowanych postów</span><span lang="ru">постов проанализировано</span></div>
+    </div>
+    <div class="top-stat">
+      <div class="num"><span lang="pl">4 lata</span><span lang="ru">4 года</span></div>
+      <div class="lbl">2022 — 2026</div>
+    </div>
+  </div>
+
+  <section id="sec-done">
+    <div class="section-head">
+      <span class="num">01</span>
+      <h2>
+        <span lang="pl">Co zostało zrobione</span>
+        <span lang="ru">Что сделано</span>
+      </h2>
+    </div>
+    <div class="desc">
+      <span lang="pl">Pełny pipeline od początku do końca działa: od Telegramu do interaktywnego
+        dashboardu. Wszystkie etapy wykonane na pełnym wolumenie danych.</span>
+      <span lang="ru">Полный сквозной пайплайн собран и работает: от Telegram до интерактивного
+        дашборда. Все этапы выполнены на полном объёме данных.</span>
+    </div>
+
+    <div class="grid">
+
+      <div class="card">
+        <h3><span class="marker done">✓</span>
+          <span lang="pl">Zbieranie i kuracja danych</span>
+          <span lang="ru">Сбор и курирование данных</span>
+        </h3>
+        <ul>
+          <li><span lang="pl">167 wydarzeń (luty 2022 — marzec 2026), wybranych ręcznie</span><span lang="ru">167 событий (февраль 2022 — март 2026), курированы вручную</span></li>
+          <li><span lang="pl">30 największych kanałów Z wybranych według częstości cytowania w źródle antywojennym</span><span lang="ru">30 крупнейших Z-каналов отобраны по частоте цитирования в антивоенном источнике</span></li>
+          <li><span lang="pl">468 000 postów pobranych przez Telethon w oknie ±3 dni wokół wydarzeń</span><span lang="ru">468 000 постов собраны через Telethon в окне ±3 дня вокруг событий</span></li>
+          <li><span lang="pl">Etykiety i kategorie wydarzeń zostały zrewidowane i znormalizowane</span><span lang="ru">Лейблы и категории событий отревизованы и нормализованы</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="marker done">✓</span>
+          <span lang="pl">Analiza LLM, etap 1: emocja</span>
+          <span lang="ru">LLM-анализ, этап 1: эмоция</span>
+        </h3>
+        <ul>
+          <li><span lang="pl">457 000 postów przeanalizowanych przez Gemini 2.5 Flash (ppq.ai)</span><span lang="ru">457 000 постов проанализированы через Gemini 2.5 Flash (ppq.ai)</span></li>
+          <li><span lang="pl">Pola: valence (−5..+5), arousal (0..5), confidence, relevance, mood</span><span lang="ru">Поля: valence (−5..+5), arousal (0..5), confidence, relevance, mood</span></li>
+          <li><span lang="pl">Klasyfikacja w 42 tematach i 10 nastrojach</span><span lang="ru">Классификация по 42 темам и 10 настроениям</span></li>
+          <li><span lang="pl">Error rate: 0,04% (150 błędów na 352K)</span><span lang="ru">Error rate: 0,04% (150 ошибок на 352K)</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="marker done">✓</span>
+          <span lang="pl">Analiza LLM, etap 2: ocena sytuacji</span>
+          <span lang="ru">LLM-анализ, этап 2: оценка ситуации</span>
+        </h3>
+        <ul>
+          <li><span lang="pl">99 000 istotnych postów ocenionych ponownie: situation_score (−5..+5)</span><span lang="ru">99 000 релевантных постов оценены повторно: situation_score (−5..+5)</span></li>
+          <li><span lang="pl">Metryka oddziela «wściekłość na wroga» od «u nas wszystko źle»</span><span lang="ru">Метрика отделяет «ярость на врага» от «всё плохо у своих»</span></li>
+          <li><span lang="pl">Kotwice kalibracyjne dla każdego poziomu od −5 do +5</span><span lang="ru">Калибровочные якоря для каждого уровня от −5 до +5</span></li>
+          <li><span lang="pl">Stała się główną metryką we wszystkich wykresach dashboardu</span><span lang="ru">Стала основной метрикой во всех графиках дашборда</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="marker done">✓</span>
+          <span lang="pl">Czyszczenie danych</span>
+          <span lang="ru">Чистка данных</span>
+        </h3>
+        <ul>
+          <li><span lang="pl">Flaga is_z odcina reposty treści ukraińskich (1,4%)</span><span lang="ru">Флаг is_z отсекает репосты украинского контента (1,4%)</span></li>
+          <li><span lang="pl">Kanał antywojenny ve4niyvoy całkowicie wyłączony</span><span lang="ru">Антивоенный канал ve4niyvoy полностью исключён</span></li>
+          <li><span lang="pl">Deduplikacja postów-spamu (&gt;3 powtórzeń)</span><span lang="ru">Дедупликация спам-постов (&gt;3 повторов)</span></li>
+          <li><span lang="pl">Powtórne przetworzenie 3 181 postów ze sprzecznością valence vs situation</span><span lang="ru">Перепрогон 3 181 поста с противоречием valence vs situation</span></li>
+          <li><span lang="pl">Reklasyfikacja 4 kanałów-«śmietników» + 263 postów Miedwiediewa</span><span lang="ru">Реклассификация 4 каналов-«помоек» + 263 поста Медведева</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="marker done">✓</span>
+          <span lang="pl">Interaktywny dashboard</span>
+          <span lang="ru">Интерактивный дашборд</span>
+        </h3>
+        <ul>
+          <li><span lang="pl">Sześć sekcji: wydarzenia, trendy, skład nastrojów, mapa emocji, profile kanałów, tabela wydarzeń</span><span lang="ru">Шесть секций: события, тренды, состав настроений, карта эмоций, профили каналов, таблица событий</span></li>
+          <li><span lang="pl">Filtry według kategorii i zakresu czasowego, nawigacja po miesiącach</span><span lang="ru">Фильтры по категории и временному диапазону, навигация по месяцам</span></li>
+          <li><span lang="pl">Panel boczny z przykładami postów dla każdego wydarzenia i nastroju</span><span lang="ru">Sidebar с примерами постов по каждому событию и настроению</span></li>
+          <li><span lang="pl">Self-contained HTML, gotowy do publikacji na GitHub Pages</span><span lang="ru">Self-contained HTML, готов к публикации на GitHub Pages</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="marker done">✓</span>
+          <span lang="pl">Koszt i infrastruktura</span>
+          <span lang="ru">Стоимость и инфраструктура</span>
+        </h3>
+        <ul>
+          <li><span lang="pl">Wszystkie wywołania LLM przez ppq.ai (bramka kompatybilna z OpenAI)</span><span lang="ru">Все LLM-вызовы через ppq.ai (OpenAI-совместимый шлюз)</span></li>
+          <li><span lang="pl">Crash-safe pipeline: JSONL z fsync linia po linii</span><span lang="ru">Crash-safe пайплайн: построчный JSONL с fsync</span></li>
+          <li><span lang="pl">Finalne «czyste» przebiegi: ~$170</span><span lang="ru">Финальные «чистовые» прогоны: ~$170</span></li>
+          <li><span lang="pl">Eksperymenty, nieudane próby, powtórne przebiegi przy zmianach promptu i metodologii: ~$330</span><span lang="ru">Эксперименты, промахи, перепрогоны при правках промпта и методологии: ~$330</span></li>
+          <li><span lang="pl">Łącznie wydane: ~$500 przez cały czas trwania projektu</span><span lang="ru">Итого израсходовано: ~$500 за всё время проекта</span></li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="sec-pipeline">
+    <div class="section-head">
+      <span class="num">02</span>
+      <h2>
+        <span lang="pl">Jak działa pipeline</span>
+        <span lang="ru">Как устроен пайплайн</span>
+      </h2>
+    </div>
+    <div class="desc">
+      <span lang="pl">Od surowego eksportu z Telegramu do interaktywnego HTML — sześć etapów,
+        każdy odtwarzalny z checkpointów.</span>
+      <span lang="ru">От сырого экспорта Telegram до интерактивного HTML — шесть этапов,
+        каждый воспроизводится из чекпоинтов.</span>
+    </div>
+
+    <div class="pipeline" lang="pl"><span class="step">result.json</span>  <span class="out">(eksport kanału antywojennego)</span>
+      <span class="arrow">↓</span>  preprocess.py
+<span class="step">posts_preprocessed.json</span>
+      <span class="arrow">↓</span>  build_catalog.py
+<span class="out">channels_catalog.json</span>  +  <span class="out">events_curated.json</span>  <span class="arrow">(167 wydarzeń, 30 kanałów)</span>
+      <span class="arrow">↓</span>  fetch_z_posts.py  <span class="arrow">(Telethon, ±3 dni)</span>
+<span class="step">z_posts_raw.json</span>  <span class="arrow">— 468K postów</span>
+      <span class="arrow">↓</span>  analyze_z.py  <span class="arrow">(Gemini Flash · ppq.ai)</span>
+<span class="step">analysis_z_events.json</span>  <span class="arrow">— 457K postów z emocjami i tematami</span>
+      <span class="arrow">↓</span>  assess_situation.py  <span class="arrow">(drugi przebieg LLM)</span>
+<span class="step">situation_scores.jsonl</span>  <span class="arrow">— 99K istotnych postów</span>
+      <span class="arrow">↓</span>  aggregate_events.py  +  aggregate_by_date.py
+<span class="out">events_aggregated.json</span>  +  <span class="out">timeline_mood.json</span>
+      <span class="arrow">↓</span>  prepare_v3_data.py  +  build_v3_dashboards.py
+<span class="step">index.html</span>  <span class="arrow">— self-contained dashboard</span></div>
+
+    <div class="pipeline" lang="ru"><span class="step">result.json</span>  <span class="out">(экспорт антивоенного канала)</span>
+      <span class="arrow">↓</span>  preprocess.py
+<span class="step">posts_preprocessed.json</span>
+      <span class="arrow">↓</span>  build_catalog.py
+<span class="out">channels_catalog.json</span>  +  <span class="out">events_curated.json</span>  <span class="arrow">(167 событий, 30 каналов)</span>
+      <span class="arrow">↓</span>  fetch_z_posts.py  <span class="arrow">(Telethon, ±3 дня)</span>
+<span class="step">z_posts_raw.json</span>  <span class="arrow">— 468K постов</span>
+      <span class="arrow">↓</span>  analyze_z.py  <span class="arrow">(Gemini Flash · ppq.ai)</span>
+<span class="step">analysis_z_events.json</span>  <span class="arrow">— 457K постов с эмоциями и темами</span>
+      <span class="arrow">↓</span>  assess_situation.py  <span class="arrow">(второй LLM-проход)</span>
+<span class="step">situation_scores.jsonl</span>  <span class="arrow">— 99K релевантных постов</span>
+      <span class="arrow">↓</span>  aggregate_events.py  +  aggregate_by_date.py
+<span class="out">events_aggregated.json</span>  +  <span class="out">timeline_mood.json</span>
+      <span class="arrow">↓</span>  prepare_v3_data.py  +  build_v3_dashboards.py
+<span class="step">index.html</span>  <span class="arrow">— self-contained дашборд</span></div>
+  </section>
+
+  <section id="sec-progress">
+    <div class="section-head">
+      <span class="num">03</span>
+      <h2>
+        <span lang="pl">Co jest w toku</span>
+        <span lang="ru">Что в процессе</span>
+      </h2>
+    </div>
+    <div class="desc">
+      <span lang="pl">Obecnie trwa ręczna weryfikacja wyników: przechodzimy przez wydarzenia
+        jedno po drugim, oglądamy próbki postów dla każdego, porównujemy oceny modelu z tym,
+        co rzeczywiście było napisane w kanałach. Każdy znaleziony błąd staje się poprawką
+        w promptcie lub post-przetwarzaniu.</span>
+      <span lang="ru">Сейчас идёт ручная верификация результатов: проходим события одно за
+        другим, смотрим выборку постов под каждым, сверяем оценки модели с тем, что реально
+        было сказано в каналах. Каждый найденный косяк превращается в правку промпта или
+        пост-обработки.</span>
+    </div>
+
+    <div class="grid">
+
+      <div class="card">
+        <h3><span class="marker work">●</span>
+          <span lang="pl">Przegląd wydarzeń i tuning algorytmów</span>
+          <span lang="ru">Просмотр событий и тюнинг алгоритмов</span>
+        </h3>
+        <p>
+          <span lang="pl">Główna metoda poprawy jakości — sprawdzanie każdego wydarzenia i jego
+            próbki postów na własne oczy. To, co wydaje się błędne, jest analizowane: błąd
+            modelu, błąd istotności, czy błąd kuracji wydarzenia. Znalezione wzorce wracają
+            do promptu i reguł filtrowania.</span>
+          <span lang="ru">Главный способ повышения качества — глазами проверять каждое событие
+            и его выборку постов. То, что кажется неправильным, разбирается: ошибка модели,
+            ошибка релевантности, или ошибка курирования события. Найденные паттерны
+            возвращаются в промпт и в правила фильтрации.</span>
+        </p>
+        <p>
+          <span lang="pl">Na obecnym etapie naprawiono już: pomylenie «wściekłości na wroga»
+            z «u nas wszystko źle», reposty źródeł ukraińskich w kanałach Z, deduplikację
+            spamu, łączenie dublujących się etykiet wydarzeń. Przy dużej skali (457K postów)
+            pozostałe błędy średnio się wygładzają — ale punktowe nieścisłości w pojedynczych
+            wydarzeniach są możliwe do zakończenia pełnego przeglądu.</span>
+          <span lang="ru">На текущем срезе уже исправлены: путаница «ярость на врага» vs «всё
+            плохо у своих», репосты украинских источников внутри Z-каналов, спам-дедупликация,
+            объединение дублирующихся лейблов событий. На большом объёме (457K постов)
+            оставшиеся ошибки в среднем сглаживаются — но точечные неточности
+            в отдельных событиях возможны до завершения полного просмотра.</span>
+        </p>
+      </div>
+
+      <div class="card">
+        <h3><span class="marker work">●</span>
+          <span lang="pl">Końcowy przegląd dashboardu</span>
+          <span lang="ru">Финальное ревью дашборда</span>
+        </h3>
+        <p>
+          <span lang="pl">Sześć sekcji jest sprawdzanych po kolei pod kątem poprawności danych,
+            czytelności i interpretowalności. Sprawdzone już: wydarzenia, trendy, kluczowe karty
+            kategorii, przykłady w panelu bocznym.</span>
+          <span lang="ru">Шесть секций последовательно проверяются на корректность данных,
+            читаемость и интерпретируемость. Уже проверены: события, тренды, ключевые
+            карточки категорий, примеры в sidebar.</span>
+        </p>
+        <ul>
+          <li><span lang="pl">Mapa emocji (situation × valence)</span><span lang="ru">Карта эмоций (situation × valence)</span></li>
+          <li><span lang="pl">Skład nastrojów (prosty / szczegółowy)</span><span lang="ru">Состав настроений (простой / детальный)</span></li>
+          <li><span lang="pl">Profile kanałów</span><span lang="ru">Профили каналов</span></li>
+          <li><span lang="pl">Tabela wydarzeń</span><span lang="ru">Таблица событий</span></li>
+          <li><span lang="pl">Bloki «Metodologia» i «O projekcie»</span><span lang="ru">Блоки «Методология» и «О проекте»</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="marker work">●</span>
+          <span lang="pl">Końcowa weryfikacja etykiet</span>
+          <span lang="ru">Финальная верификация лейблов</span>
+        </h3>
+        <p>
+          <span lang="pl">Etykiety i kategorie wydarzeń zostały już zrewidowane w zbiorze
+            kuratorskim. Pozostało: synchronizacja z agregacją przy kolejnym przebiegu
+            (część zmian nazw istnieje tylko w warstwie kuratorskiej).</span>
+          <span lang="ru">Лейблы и категории событий уже отревизованы в курируемом наборе.
+            Осталось: синхронизация с агрегацией при следующем перепрогоне (часть
+            переименований живёт только в курируемом слое).</span>
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="sec-plan">
+    <div class="section-head">
+      <span class="num">04</span>
+      <h2>
+        <span lang="pl">Co jest planowane</span>
+        <span lang="ru">Что планируется</span>
+      </h2>
+    </div>
+    <div class="desc">
+      <span lang="pl">Dalszy rozwój podzielony jest na krótkoterminowy (świeże dane i
+        aktualizacje) oraz długoterminowy (poprawa jakości i zasięgu).</span>
+      <span lang="ru">Дальнейшее развитие разделено на ближайшее (свежие данные и
+        обновления) и долгосрочное (улучшения качества и охвата).</span>
+    </div>
+
+    <div class="grid">
+
+      <div class="card">
+        <h3><span class="marker plan">→</span>
+          <span lang="pl">Świeże dane po marcu 2026</span>
+          <span lang="ru">Свежие данные после марта 2026</span>
+        </h3>
+        <p>
+          <span lang="pl">Uruchomienie regularnego cyklu aktualizacji — dodawanie wydarzeń
+            co miesiąc.</span>
+          <span lang="ru">Запуск регулярного цикла обновления — добавлять события каждый месяц.</span>
+        </p>
+        <ul>
+          <li><span lang="pl">~4–5 nowych wydarzeń miesięcznie</span><span lang="ru">~4–5 новых событий в месяц</span></li>
+          <li><span lang="pl">Comiesięczny fetch + analiza LLM + aktualizacja dashboardu</span><span lang="ru">Ежемесячный fetch + LLM-анализ + обновление дашборда</span></li>
+          <li><span lang="pl">Dodanie pominiętych wydarzeń: Machaczkała, inauguracja Trumpa</span><span lang="ru">Добавление пропущенных событий: Махачкала, инаугурация Трампа</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="marker plan">→</span>
+          <span lang="pl">Wersja angielska</span>
+          <span lang="ru">Английская версия</span>
+        </h3>
+        <p>
+          <span lang="pl">Pełne tłumaczenie dashboardu i strony metodologii dla międzynarodowej
+            publiczności. Oddzielna kompilacja HTML z przełącznikiem języka lub równoległa strona.</span>
+          <span lang="ru">Полный перевод дашборда и страницы методологии для международной
+            аудитории. Отдельная HTML-сборка с переключателем языка либо параллельный сайт.</span>
+        </p>
+      </div>
+
+      <div class="card">
+        <h3><span class="marker plan">→</span>
+          <span lang="pl">Wersja mobilna</span>
+          <span lang="ru">Мобильная вёрстка</span>
+        </h3>
+        <p>
+          <span lang="pl">Adaptacja wykresów i interfejsu do małych ekranów. Obecnie dashboard
+            jest zoptymalizowany pod desktop — potrzebny jest przegląd układu i testowanie na
+            urządzeniach mobilnych.</span>
+          <span lang="ru">Адаптация графиков и интерфейса под маленькие экраны. Сейчас
+            дашборд оптимизирован под десктоп — нужен пересмотр компоновки и тестирование
+            на мобильных устройствах.</span>
+        </p>
+      </div>
+
+      <div class="card">
+        <h3><span class="marker plan">→</span>
+          <span lang="pl">Połączenie dwóch przebiegów LLM</span>
+          <span lang="ru">Объединение двух LLM-прогонов</span>
+        </h3>
+        <p>
+          <span lang="pl">Obecnie emocja i ocena sytuacji obliczane są osobno. Połączenie
+            w jedno wywołanie daje ~30% oszczędności tokenów i bardziej spójny kontekst dla modelu.</span>
+          <span lang="ru">Сейчас эмоция и оценка ситуации считаются раздельно. Объединение
+            в один вызов даёт ~30% экономии токенов и более согласованный контекст для модели.</span>
+        </p>
+      </div>
+
+      <div class="card">
+        <h3><span class="marker plan">→</span>
+          <span lang="pl">Rozszerzenie katalogu kanałów</span>
+          <span lang="ru">Расширение каталога каналов</span>
+        </h3>
+        <p>
+          <span lang="pl">Obecnie 30 kanałów z przewagą tych dużych. Cel — 50–60, włącznie ze
+            średnimi (50–100K subskrybentów), które często są szczerze. Wymaga ponownego pobrania.</span>
+          <span lang="ru">Сейчас 30 каналов с перекосом в крупные. Цель — 50–60, включая
+            средние (50–100K подписчиков), которые часто откровеннее. Требует повторного fetch.</span>
+        </p>
+      </div>
+
+      <div class="card">
+        <h3><span class="marker plan">→</span>
+          <span lang="pl">Audyt drogim modelem</span>
+          <span lang="ru">Аудит дорогой моделью</span>
+        </h3>
+        <p>
+          <span lang="pl">Trzeci przebieg na 5% postów z rozbieżnościami między wcześniejszymi
+            przebiegami, przez Claude Sonnet lub Gemini Pro z chain-of-thought. Daje górne
+            oszacowanie błędu pipeline'u.</span>
+          <span lang="ru">Третий проход на 5% постов с расхождением между прогонами через
+            Claude Sonnet или Gemini Pro с chain-of-thought. Даёт верхнюю оценку ошибки
+            пайплайна.</span>
+        </p>
+      </div>
+
+      <div class="card">
+        <h3><span class="marker plan">→</span>
+          <span lang="pl">Adaptacyjne okno wydarzeń</span>
+          <span lang="ru">Адаптивное окно событий</span>
+        </h3>
+        <p>
+          <span lang="pl">Obecnie stałe ±3 dni. Dla dużych wydarzeń (Kursk, Bachmut) potrzeba
+            ±7 dni, dla małych — ±1. Okno można dobierać automatycznie według wolumenu postów.</span>
+          <span lang="ru">Сейчас фиксированное ±3 дня. Для крупных событий (Курск, Бахмут)
+            нужно ±7 дней, для мелких — ±1. Окно можно подбирать автоматически по объёму
+            постов.</span>
+        </p>
+      </div>
+
+      <div class="card">
+        <h3><span class="marker plan">→</span>
+          <span lang="pl">Etykietowanie gold standard</span>
+          <span lang="ru">Gold standard разметка</span>
+        </h3>
+        <p>
+          <span lang="pl">500–1000 postów oznaczonych ręcznie przez 2–3 osoby — do pomiaru
+            jakości (MAE, korelacja, precision/recall po mood) i porównania modeli.</span>
+          <span lang="ru">500–1000 постов, размеченных вручную 2–3 людьми, для измерения
+            качества (MAE, корреляция, precision/recall по mood) и сравнения моделей.</span>
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="sec-cost">
+    <div class="section-head">
+      <span class="num">05</span>
+      <h2>
+        <span lang="pl">Koszt utrzymania</span>
+        <span lang="ru">Стоимость поддержки</span>
+      </h2>
+    </div>
+    <div class="desc">
+      <span lang="pl">Tylko koszty analizy AI (bez infrastruktury, czasu kuracji i hostingu —
+        strona publikowana jest darmowo na GitHub Pages). Liczyć tylko po «happy path» jest
+        niesłusznie: prawdziwy projekt badawczy stale powtarza analizę danych przy zmianach
+        promptu, sprawdza hipotezy i ponownie etykietuje archiwum po zmianach w metodologii.</span>
+      <span lang="ru">Только расходы на ИИ-анализ (без учёта инфраструктуры, времени
+        на курирование и хостинга — сайт публикуется бесплатно на GitHub Pages).
+        Цифры по «happy path» считать неверно: реальный исследовательский проект
+        постоянно перепрогоняет данные при правках промпта, проверяет гипотезы и
+        переразмечает архив после изменений в методологии.</span>
+    </div>
+
+    <div class="cost-split">
+      <div class="cost-card">
+        <div class="cost-label">
+          <span lang="pl">Minimum, zamrożone</span>
+          <span lang="ru">Минимум, заморожено</span>
+        </div>
+        <div class="cost-val">~$5–10<span class="cost-unit"><span lang="pl">/ mies</span><span lang="ru">/ мес</span></span></div>
+        <div class="cost-note">
+          <span lang="pl">Tylko rutynowe dodawanie nowych wydarzeń w istniejącym pipeline,
+            bez zmian. Tak prawie nigdy nie jest na żywym projekcie.</span>
+          <span lang="ru">Только штатное добавление новых событий по существующему
+            пайплайну, без изменений. Так почти никогда не бывает на живом проекте.</span>
+        </div>
+      </div>
+      <div class="cost-card">
+        <div class="cost-label">
+          <span lang="pl">Tryb aktywny</span>
+          <span lang="ru">Активный режим</span>
+        </div>
+        <div class="cost-val">~$40–80<span class="cost-unit"><span lang="pl">/ mies</span><span lang="ru">/ мес</span></span></div>
+        <div class="cost-note">
+          <span lang="pl">Prawdziwy tryb żywego badania: nowe wydarzenia + iteracje promptu +
+            punktowe powtórne przebiegi próbek przy znalezionych błędach + testy A/B + audyt
+            drogim modelem.</span>
+          <span lang="ru">Реальный режим живого исследования: новые события + итерации
+            промпта + точечные перепрогоны выборок при найденных косяках + A/B-тесты +
+            аудит-проход дорогой моделью.</span>
+        </div>
+      </div>
+      <div class="cost-card">
+        <div class="cost-label">
+          <span lang="pl">Duże zmiany</span>
+          <span lang="ru">Крупные правки</span>
+        </div>
+        <div class="cost-val">~$200–400<span class="cost-unit"><span lang="pl">/ jednorazowo</span><span lang="ru">/ разово</span></span></div>
+        <div class="cost-note">
+          <span lang="pl">Raz na kwartał lub pół roku: pełny powtórny przebieg archiwum przy
+            aktualizacji promptu lub modelu, rozszerzenie katalogu kanałów, dodanie nowych pól
+            klasyfikacji.</span>
+          <span lang="ru">Раз в квартал-полгода: полный перепрогон архива при обновлении
+            промпта или модели, расширение каталога каналов, добавление новых полей
+            классификации.</span>
+        </div>
+      </div>
+    </div>
+
+    <table class="cost-table">
+      <thead>
+        <tr>
+          <th><span lang="pl">Składnik</span><span lang="ru">Компонент</span></th>
+          <th class="right"><span lang="pl">Wolumen</span><span lang="ru">Объём</span></th>
+          <th class="right"><span lang="pl">Koszt</span><span lang="ru">Стоимость</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <span lang="pl">Nowe wydarzenia miesięcznie</span><span lang="ru">Новые события в месяц</span>
+            <div class="sub"><span lang="pl">szacunek za 2024–2025</span><span lang="ru">оценка по 2024–2025</span></div>
+          </td>
+          <td class="right">~4–5</td>
+          <td class="right">—</td>
+        </tr>
+        <tr>
+          <td>
+            <span lang="pl">Nowych postów / miesiąc</span><span lang="ru">Новых постов / месяц</span>
+            <div class="sub"><span lang="pl">30 kanałów · ±3 dni</span><span lang="ru">30 каналов · ±3 дня</span></div>
+          </td>
+          <td class="right">10K–12K</td>
+          <td class="right">—</td>
+        </tr>
+        <tr>
+          <td>
+            <span lang="pl">Podstawowa analiza LLM</span><span lang="ru">Базовый LLM-анализ</span>
+            <div class="sub"><span lang="pl">Gemini 2.5 Flash, dwa przebiegi, ~$0,0006 za post</span><span lang="ru">Gemini 2.5 Flash, два прохода, ~$0,0006 за пост</span></div>
+          </td>
+          <td class="right"><span lang="pl">wszystkie nowe posty</span><span lang="ru">все новые посты</span></td>
+          <td class="right">~$5–8 <span lang="pl">/ mies</span><span lang="ru">/ мес</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span lang="pl">Iteracje promptu i eksperymenty</span><span lang="ru">Итерации промпта и эксперименты</span>
+            <div class="sub"><span lang="pl">przebiegi testowe na próbkach 1–5K postów</span><span lang="ru">тест-прогоны на выборках 1–5K постов</span></div>
+          </td>
+          <td class="right"><span lang="pl">2–4 miesięcznie</span><span lang="ru">2–4 в месяц</span></td>
+          <td class="right">~$10–25 <span lang="pl">/ mies</span><span lang="ru">/ мес</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span lang="pl">Punktowe powtórne przebiegi przy znalezionych błędach</span><span lang="ru">Точечные перепрогоны при найденных ошибках</span>
+            <div class="sub"><span lang="pl">podzbiory według filtrów po ręcznym przeglądzie</span><span lang="ru">подмножества по фильтрам после ручного просмотра</span></div>
+          </td>
+          <td class="right">5–15K <span lang="pl">postów</span><span lang="ru">постов</span></td>
+          <td class="right">~$5–15 <span lang="pl">/ mies</span><span lang="ru">/ мес</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span lang="pl">Audyt drogim modelem</span><span lang="ru">Аудит-проход дорогой моделью</span>
+            <div class="sub"><span lang="pl">Claude Sonnet / Gemini Pro, 5% postów</span><span lang="ru">Claude Sonnet / Gemini Pro, 5% постов</span></div>
+          </td>
+          <td class="right">~600 <span lang="pl">postów</span><span lang="ru">постов</span></td>
+          <td class="right">~$5–10 <span lang="pl">/ mies</span><span lang="ru">/ мес</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span lang="pl">Bufor na awarie i ponowne próby</span><span lang="ru">Запас на провалы и повторные попытки</span>
+            <div class="sub"><span lang="pl">błędy API, nieudane formaty JSON, debugowanie</span><span lang="ru">сбои API, неудачные форматы JSON, отладка</span></div>
+          </td>
+          <td class="right">~15%</td>
+          <td class="right">~$5–10 <span lang="pl">/ mies</span><span lang="ru">/ мес</span></td>
+        </tr>
+        <tr class="total">
+          <td><span lang="pl">Łącznie, tryb aktywny</span><span lang="ru">Итого, активный режим</span></td>
+          <td class="right">—</td>
+          <td class="right">~$40–80 <span lang="pl">/ mies</span><span lang="ru">/ мес</span></td>
+        </tr>
+        <tr>
+          <td colspan="3" style="background:#FAFAF8; padding-top:6px; padding-bottom:6px; font-size:12px; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.5px;">
+            <span lang="pl">Jednorazowe duże zmiany</span><span lang="ru">Разовые крупные правки</span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span lang="pl">Pełny powtórny przebieg archiwum</span><span lang="ru">Полный перепрогон архива</span>
+            <div class="sub"><span lang="pl">po zmianie promptu lub modelu — ~457K postów</span><span lang="ru">после правки промпта или смены модели — ~457K постов</span></div>
+          </td>
+          <td class="right"><span lang="pl">archiwum</span><span lang="ru">архив</span></td>
+          <td class="right">~$180–280</td>
+        </tr>
+        <tr>
+          <td>
+            <span lang="pl">Rozszerzenie katalogu kanałów</span><span lang="ru">Расширение каталога каналов</span>
+            <div class="sub"><span lang="pl">30 → 50, ponowny fetch + analiza nowych postów</span><span lang="ru">30 → 50, повторный fetch + анализ новых постов</span></div>
+          </td>
+          <td class="right">+~150K <span lang="pl">postów</span><span lang="ru">постов</span></td>
+          <td class="right">~$60–100</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      <span lang="pl">Faktycznie wydane przez cały czas projektu: <b>~$500</b>. Z tego na czyste
+        przebiegi ~$170, reszta — eksperymenty, nieudane podejścia, powtórne przebiegi przy
+        zmianach metodologii. To normalny profil wydatków na etapie rozwoju i kalibracji —
+        na etapie utrzymania zmniejszają się, ale nigdy do poziomu «happy path». Gdy projekt
+        wychodzi z fazy aktywnej i przechodzi w rutynowe aktualizacje, koszty stabilizują się
+        bliżej dolnej granicy trybu aktywnego.</span>
+      <span lang="ru">Фактически потрачено за всё время проекта: <b>~$500</b>. Из них чистовых
+        прогонов на ~$170, остальное — эксперименты, неудачные подходы, перепрогоны при
+        правках методологии. Это нормальный профиль расходов на этапе разработки и
+        калибровки — на этапе поддержки они снижаются, но никогда до уровня «happy path».
+        Когда проект выходит из активной фазы и уходит в штатное обновление, расходы
+        стабилизируются ближе к нижней границе активного режима.</span>
+    </div>
+  </section>
+
+  <footer>
+    <span lang="pl">Bezpośrednia analiza postów kanałów Z przez LLM · Gemini 2.5 Flash · 29 kanałów · 167 wydarzeń · 457K postów</span>
+    <span lang="ru">Прямой анализ постов Z-каналов через LLM · Gemini 2.5 Flash · 29 каналов · 167 событий · 457K постов</span>
+  </footer>
+
+</div>
+
+<script>
+  function setLang(lang) {
+    document.body.setAttribute('data-lang', lang);
+    document.documentElement.setAttribute('lang', lang);
+    document.getElementById('btn-pl').classList.toggle('active', lang === 'pl');
+    document.getElementById('btn-ru').classList.toggle('active', lang === 'ru');
+    try { localStorage.setItem('methodology-lang', lang); } catch (e) {}
+  }
+  try {
+    var saved = localStorage.getItem('methodology-lang');
+    if (saved === 'ru' || saved === 'pl') setLang(saved);
+  } catch (e) {}
+</script>
+
+</body>
+</html>

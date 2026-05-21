@@ -249,6 +249,26 @@
 
   footer { text-align: center; padding: 40px 0; color: #9CA3AF; font-size: 12px; }
 
+  /* Language switcher */
+  .lang-switch { position: fixed; top: 16px; right: 20px; display: flex;
+                  background: #fff; border: 1px solid #E5E5E0; border-radius: 999px;
+                  padding: 3px; gap: 0; z-index: 150; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+  .lang-switch button { background: transparent; border: 0; cursor: pointer;
+                          font-family: inherit; font-size: 12px; font-weight: 600;
+                          color: #9CA3AF; padding: 6px 14px; border-radius: 999px;
+                          letter-spacing: 0.5px; transition: all 0.15s; }
+  .lang-switch button.active { background: #1a1a2e; color: #fff; }
+  .lang-switch button:not(.active):hover { color: #1a1a2e; }
+
+  body[data-lang="ru"] [lang="en"] { display: none !important; }
+  body[data-lang="en"] [lang="ru"] { display: none !important; }
+
+  /* English-only disclaimer banner */
+  .en-disclaimer { background: #FEF3C7; border: 1px solid #FCD34D; border-radius: 8px;
+                    padding: 12px 18px; margin: 16px 0; font-size: 13px;
+                    color: #78350F; line-height: 1.6; }
+  .en-disclaimer b { color: #451A03; }
+
   /* Mobile */
   @media (max-width: 768px) {
     .container { padding: 0 12px; }
@@ -266,34 +286,57 @@
     .meth-grid { grid-template-columns: 1fr; }
     .takeaways { padding: 16px 18px; }
     .cat-compare { flex-direction: column; align-items: center; }
+    .lang-switch { top: 8px; right: 8px; padding: 2px; }
+    .lang-switch button { padding: 4px 10px; font-size: 11px; }
   }
 </style>
 </head>
-<body>
+<body data-lang="ru">
+
+<div class="lang-switch">
+  <button id="btn-ru" class="active" onclick="setLang('ru')">RU</button>
+  <button id="btn-en" onclick="setLang('en')">EN</button>
+</div>
+
 <div class="container">
   <header>
-    <h1>Анализ настроений Z-блогеров</h1>
-    <div class="subtitle">Как провоенный российский Telegram реагировал на ключевые события войны: 4 года, 29 каналов, 457 000 постов</div>
+    <h1>
+      <span lang="ru">Анализ настроений Z-блогеров</span>
+      <span lang="en">Sentiment analysis of Z-bloggers</span>
+    </h1>
+    <div class="subtitle">
+      <span lang="ru">Как провоенный российский Telegram реагировал на ключевые события войны: 4 года, 29 каналов, 457 000 постов</span>
+      <span lang="en">How pro-war Russian Telegram reacted to key events of the war: 4 years, 29 channels, 457,000 posts</span>
+    </div>
     <div class="header-stats" id="stats"></div>
   </header>
 
+  <div class="en-disclaimer" lang="en">
+    <b>Limited English translation.</b> Only the static UI text (headings, descriptions, buttons,
+    sections) has been translated. The data itself — event names, channel names, mood and topic labels,
+    post excerpts in the sidebar, key takeaways and dynamic chart tooltips — remains in the original
+    Russian, since the analysis works directly with Russian-language source material. A full English
+    edition with translated data is planned.
+  </div>
+
   <details class="takeaways" id="sec-takeaways" open>
-    <summary>Ключевые находки</summary>
+    <summary><span lang="ru">Ключевые находки</span><span lang="en">Key takeaways</span></summary>
     <ul id="takeaways-list"></ul>
   </details>
 
   <div class="filter-bar">
     <div class="filter-row-top">
       <div class="cat-buttons">
-        <button class="active" data-cat="all" onclick="setCatFilter('all')">Все</button>
-        <button data-cat="war" onclick="setCatFilter('war')">Военные</button>
-        <button data-cat="internal" onclick="setCatFilter('internal')">Внутренние</button>
-        <button data-cat="diplomacy" onclick="setCatFilter('diplomacy')">Дипломатия</button>
+        <button class="active" data-cat="all" onclick="setCatFilter('all')"><span lang="ru">Все</span><span lang="en">All</span></button>
+        <button data-cat="war" onclick="setCatFilter('war')"><span lang="ru">Военные</span><span lang="en">Military</span></button>
+        <button data-cat="internal" onclick="setCatFilter('internal')"><span lang="ru">Внутренние</span><span lang="en">Internal</span></button>
+        <button data-cat="diplomacy" onclick="setCatFilter('diplomacy')"><span lang="ru">Дипломатия</span><span lang="en">Diplomacy</span></button>
       </div>
       <div class="filter-right">
-        <button id="btn-all" class="active" onclick="resetFilter()">За все время</button>
+        <button id="btn-all" class="active" onclick="resetFilter()"><span lang="ru">За все время</span><span lang="en">All time</span></button>
         <select id="month-select" onchange="jumpToMonth(this.value)" style="padding:5px 8px;border:1px solid #D1D5DB;border-radius:6px;font-size:13px;font-family:inherit;background:#fff;color:#374151;cursor:pointer;">
-          <option value="">Перейти к месяцу...</option>
+          <option value="" lang="ru">Перейти к месяцу...</option>
+          <option value="" lang="en">Jump to month...</option>
         </select>
         <span class="filter-info" id="filter-info"></span>
       </div>
@@ -309,110 +352,155 @@
   </div>
 
   <div style="background:#F8F7F4;border:1px solid #E5E5E0;border-radius:8px;padding:14px 20px;margin:0 0 -24px;font-size:13px;line-height:1.6;color:#6B7280;" id="how-to-read">
-    <b style="color:#374151;">Как читать графики:</b> основная метрика — <i>оценка ситуации</i> (−5..+5): как Z-блогер оценивает положение дел для своей стороны.
+    <span lang="ru"><b style="color:#374151;">Как читать графики:</b> основная метрика — <i>оценка ситуации</i> (−5..+5): как Z-блогер оценивает положение дел для своей стороны.
     −5 = катастрофа (поражение, развал), 0 = нейтрально, +5 = триумф (победа).
-    Дополнительно показана <i>эмоция</i> — эмоциональное состояние автора. Эмоция и оценка ситуации могут расходиться: блогер в ярости на врага (эмоция −5), но ситуация для его стороны нормальная (ситуация 0).
+    Дополнительно показана <i>эмоция</i> — эмоциональное состояние автора. Эмоция и оценка ситуации могут расходиться: блогер в ярости на врага (эмоция −5), но ситуация для его стороны нормальная (ситуация 0).</span>
+    <span lang="en"><b style="color:#374151;">How to read the charts:</b> the primary metric is the <i>situation score</i> (−5..+5): how a Z-blogger perceives the state of affairs for their own side.
+    −5 = catastrophe (defeat, collapse), 0 = neutral, +5 = triumph (victory).
+    A secondary <i>emotion</i> metric shows the author's emotional state. Emotion and situation may diverge: a blogger raging at the enemy (emotion −5) while the situation for their side is fine (situation 0).</span>
   </div>
 
   <section id="sec-timeline">
-    <h2>Оценка ситуации по событиям</h2>
-    <div class="desc">Как Z-блогеры оценивали положение дел для своей стороны по каждому событию. Ниже нуля — ситуация воспринимается плохо, выше — хорошо. Размер точки отражает число постов. При большом числе событий отображаются топ-30 самых обсуждаемых — используйте фильтры по категории или дате.<br><span class="click-hint">Наведите на точку для подробностей, кликните для деталей.</span></div>
+    <h2><span lang="ru">Оценка ситуации по событиям</span><span lang="en">Situation assessment by event</span></h2>
+    <div class="desc">
+      <span lang="ru">Как Z-блогеры оценивали положение дел для своей стороны по каждому событию. Ниже нуля — ситуация воспринимается плохо, выше — хорошо. Размер точки отражает число постов. При большом числе событий отображаются топ-30 самых обсуждаемых — используйте фильтры по категории или дате.<br><span class="click-hint">Наведите на точку для подробностей, кликните для деталей.</span></span>
+      <span lang="en">How Z-bloggers assessed the situation for their own side at each event. Below zero — the situation is perceived as bad, above — good. Dot size reflects post count. When there are many events, the top 30 most-discussed are shown — use the category and date filters.<br><span class="click-hint">Hover over a point for details, click for the full breakdown.</span></span>
+    </div>
     <div class="chart" id="timeline" style="height:420px;"></div>
     <div id="pull-quote-1"></div>
   </section>
 
   <section id="sec-trend">
-    <h2>Общий тренд настроений</h2>
-    <div class="desc">Средняя тональность по дням (серые точки) со скользящей средней. Данные доступны за ±3 дня вокруг курированных событий, не непрерывно — пробелы в линиях соответствуют периодам без данных.</div>
+    <h2><span lang="ru">Общий тренд настроений</span><span lang="en">Overall sentiment trend</span></h2>
+    <div class="desc">
+      <span lang="ru">Средняя тональность по дням (серые точки) со скользящей средней. Данные доступны за ±3 дня вокруг курированных событий, не непрерывно — пробелы в линиях соответствуют периодам без данных.</span>
+      <span lang="en">Daily average sentiment (grey dots) with a rolling mean. Data is available for ±3 days around each curated event, not continuously — gaps in the line correspond to periods without data.</span>
+    </div>
     <div id="trend-extremes" style="font-size:13px;color:#6B7280;margin-bottom:10px;"></div>
     <div style="margin-bottom:12px;">
-      <button id="btn-ma7" onclick="setTrendMA(7)" style="padding:6px 16px;border:1px solid #D1D5DB;border-radius:6px 0 0 6px;background:#1a1a2e;color:#fff;cursor:pointer;font-size:13px;font-family:inherit;">Сред. за 7 дн.</button><button id="btn-ma14" onclick="setTrendMA(14)" style="padding:6px 16px;border:1px solid #D1D5DB;border-left:none;border-radius:0 6px 6px 0;background:#fff;color:#374151;cursor:pointer;font-size:13px;font-family:inherit;">Сред. за 14 дн.</button>
+      <button id="btn-ma7" onclick="setTrendMA(7)" style="padding:6px 16px;border:1px solid #D1D5DB;border-radius:6px 0 0 6px;background:#1a1a2e;color:#fff;cursor:pointer;font-size:13px;font-family:inherit;"><span lang="ru">Сред. за 7 дн.</span><span lang="en">7-day avg</span></button><button id="btn-ma14" onclick="setTrendMA(14)" style="padding:6px 16px;border:1px solid #D1D5DB;border-left:none;border-radius:0 6px 6px 0;background:#fff;color:#374151;cursor:pointer;font-size:13px;font-family:inherit;"><span lang="ru">Сред. за 14 дн.</span><span lang="en">14-day avg</span></button>
     </div>
     <div class="chart" id="timeline-mood" style="height:320px;"></div>
   </section>
 
   <section id="sec-moods">
-    <h2>Состав настроений</h2>
-    <div class="desc" style="margin-bottom:6px;">Доля позитивных и негативных настроений по каждому событию (в %).</div>
+    <h2><span lang="ru">Состав настроений</span><span lang="en">Mood composition</span></h2>
+    <div class="desc" style="margin-bottom:6px;">
+      <span lang="ru">Доля позитивных и негативных настроений по каждому событию (в %).</span>
+      <span lang="en">Share of positive and negative moods per event (in %).</span>
+    </div>
     <div id="cat-stats-line" style="font-size:13px;color:#6B7280;margin-bottom:14px;"></div>
     <div style="margin-bottom:4px;">
-      <button id="btn-simple" onclick="showMoods('simple')" style="padding:6px 16px;border:1px solid #D1D5DB;border-radius:6px 0 0 6px;background:#1a1a2e;color:#fff;cursor:pointer;font-size:13px;">Простой</button><button id="btn-detail" onclick="showMoods('detail')" style="padding:6px 16px;border:1px solid #D1D5DB;border-left:none;border-radius:0 6px 6px 0;background:#fff;color:#374151;cursor:pointer;font-size:13px;">Детальный</button>
+      <button id="btn-simple" onclick="showMoods('simple')" style="padding:6px 16px;border:1px solid #D1D5DB;border-radius:6px 0 0 6px;background:#1a1a2e;color:#fff;cursor:pointer;font-size:13px;"><span lang="ru">Простой</span><span lang="en">Simple</span></button><button id="btn-detail" onclick="showMoods('detail')" style="padding:6px 16px;border:1px solid #D1D5DB;border-left:none;border-radius:0 6px 6px 0;background:#fff;color:#374151;cursor:pointer;font-size:13px;"><span lang="ru">Детальный</span><span lang="en">Detailed</span></button>
     </div>
-    <div class="click-hint" style="margin-bottom:12px;">Кликните на сегмент для примеров постов.</div>
+    <div class="click-hint" style="margin-bottom:12px;">
+      <span lang="ru">Кликните на сегмент для примеров постов.</span>
+      <span lang="en">Click a segment for example posts.</span>
+    </div>
     <div class="chart" id="moods" style="height:360px;"></div>
     <div id="moods-legend" class="custom-legend"></div>
   </section>
 
   <section id="sec-scatter">
-    <h2>Карта эмоций</h2>
-    <div class="desc">Каждое событие на двух осях: оценка ситуации (плохая—хорошая) и эмоциональная окраска (негатив—позитив). Размер точки отражает число постов. <span class="click-hint">Кликните на точку для разбивки по каналам.</span></div>
+    <h2><span lang="ru">Карта эмоций</span><span lang="en">Emotion map</span></h2>
+    <div class="desc">
+      <span lang="ru">Каждое событие на двух осях: оценка ситуации (плохая—хорошая) и эмоциональная окраска (негатив—позитив). Размер точки отражает число постов. <span class="click-hint">Кликните на точку для разбивки по каналам.</span></span>
+      <span lang="en">Each event on two axes: situation score (bad—good) and emotional valence (negative—positive). Dot size reflects post count. <span class="click-hint">Click a point for the per-channel breakdown.</span></span>
+    </div>
     <div class="chart" id="scatter" style="height:400px;"></div>
   </section>
 
   <section id="sec-channels">
-    <h2>Профили каналов</h2>
-    <div class="desc">Средняя оценка ситуации каждого из 29 Z-каналов. Длина полосы — среднее значение, цвет — направление (красный = негатив, зелёный = позитив). Число в скобках — количество релевантных постов.</div>
+    <h2><span lang="ru">Профили каналов</span><span lang="en">Channel profiles</span></h2>
+    <div class="desc">
+      <span lang="ru">Средняя оценка ситуации каждого из 29 Z-каналов. Длина полосы — среднее значение, цвет — направление (красный = негатив, зелёный = позитив). Число в скобках — количество релевантных постов.</span>
+      <span lang="en">Average situation score for each of the 29 Z-channels. Bar length is the mean value, colour the direction (red = negative, green = positive). The number in brackets is the count of relevant posts.</span>
+    </div>
     <div style="margin-bottom:12px;">
-      <button class="active" data-chf="all" onclick="setChFilter('all')" style="padding:5px 14px;border:1px solid #D1D5DB;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit;background:#1a1a2e;color:#fff;">Все</button>
-      <button data-chf="neg" onclick="setChFilter('neg')" style="padding:5px 14px;border:1px solid #D1D5DB;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit;background:#fff;color:#374151;">Критики</button>
-      <button data-chf="neu" onclick="setChFilter('neu')" style="padding:5px 14px;border:1px solid #D1D5DB;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit;background:#fff;color:#374151;">Нейтральные</button>
-      <button data-chf="pos" onclick="setChFilter('pos')" style="padding:5px 14px;border:1px solid #D1D5DB;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit;background:#fff;color:#374151;">Оптимисты</button>
+      <button class="active" data-chf="all" onclick="setChFilter('all')" style="padding:5px 14px;border:1px solid #D1D5DB;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit;background:#1a1a2e;color:#fff;"><span lang="ru">Все</span><span lang="en">All</span></button>
+      <button data-chf="neg" onclick="setChFilter('neg')" style="padding:5px 14px;border:1px solid #D1D5DB;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit;background:#fff;color:#374151;"><span lang="ru">Критики</span><span lang="en">Critics</span></button>
+      <button data-chf="neu" onclick="setChFilter('neu')" style="padding:5px 14px;border:1px solid #D1D5DB;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit;background:#fff;color:#374151;"><span lang="ru">Нейтральные</span><span lang="en">Neutral</span></button>
+      <button data-chf="pos" onclick="setChFilter('pos')" style="padding:5px 14px;border:1px solid #D1D5DB;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit;background:#fff;color:#374151;"><span lang="ru">Оптимисты</span><span lang="en">Optimists</span></button>
     </div>
     <div id="channel-profiles"></div>
   </section>
 
   <section id="sec-table">
-    <h2>События</h2>
-    <div class="desc">Все события и их влияние на настроения. <span class="click-hint">Кликните на строку для деталей.</span></div>
+    <h2><span lang="ru">События</span><span lang="en">Events</span></h2>
+    <div class="desc">
+      <span lang="ru">Все события и их влияние на настроения. <span class="click-hint">Кликните на строку для деталей.</span></span>
+      <span lang="en">All events and their impact on sentiment. <span class="click-hint">Click a row for details.</span></span>
+    </div>
     <div id="events-table"></div>
   </section>
 
   <section id="sec-about">
     <div class="about-box">
-      <h3>О проекте</h3>
-      <p>Независимое исследование настроений провоенного российского Telegram на фоне ключевых событий войны в Украине (февраль 2022 — март 2026). Проект не аффилирован с государственными или медийными структурами.</p>
-      <p>Все данные получены из открытых Telegram-каналов. Анализ выполнен в два этапа: (1) эмоциональная тональность и классификация через LLM, (2) оценка ситуации — как Z-блогер воспринимает положение дел для своей стороны. Результаты отражают агрегированные настроения авторов Z-каналов — не российского общества в целом.</p>
-      <p class="limit"><b>Ограничения:</b> Автоматический анализ может содержать ошибки (особенно при сарказме и иронии). Нейтральные пересказы новостей без авторской оценки могут получать оценку −1..−3 вместо 0. Выборка из 30 каналов не является репрезентативной для всей Z-аудитории. Около 25% событий вызывают сильный разброс мнений, что говорит о поляризации внутри Z-сообщества.</p>
+      <h3><span lang="ru">О проекте</span><span lang="en">About the project</span></h3>
+      <p>
+        <span lang="ru">Независимое исследование настроений провоенного российского Telegram на фоне ключевых событий войны в Украине (февраль 2022 — март 2026). Проект не аффилирован с государственными или медийными структурами.</span>
+        <span lang="en">An independent study of sentiment in pro-war Russian Telegram around key events of the war in Ukraine (February 2022 — March 2026). The project is not affiliated with any state or media organisation.</span>
+      </p>
+      <p>
+        <span lang="ru">Все данные получены из открытых Telegram-каналов. Анализ выполнен в два этапа: (1) эмоциональная тональность и классификация через LLM, (2) оценка ситуации — как Z-блогер воспринимает положение дел для своей стороны. Результаты отражают агрегированные настроения авторов Z-каналов — не российского общества в целом.</span>
+        <span lang="en">All data comes from open Telegram channels. The analysis runs in two stages: (1) emotional tone and classification via LLM, (2) situation score — how a Z-blogger perceives the state of affairs for their own side. Results reflect aggregated sentiment of Z-channel authors, not Russian society at large.</span>
+      </p>
+      <p class="limit">
+        <span lang="ru"><b>Ограничения:</b> Автоматический анализ может содержать ошибки (особенно при сарказме и иронии). Нейтральные пересказы новостей без авторской оценки могут получать оценку −1..−3 вместо 0. Выборка из 30 каналов не является репрезентативной для всей Z-аудитории. Около 25% событий вызывают сильный разброс мнений, что говорит о поляризации внутри Z-сообщества.</span>
+        <span lang="en"><b>Limitations:</b> Automated analysis can be wrong, especially on sarcasm and irony. Neutral news retellings without an author's opinion sometimes get −1..−3 instead of 0. A sample of 30 channels is not representative of the entire Z-audience. Around 25% of events trigger high opinion variance, indicating polarisation within the Z-community.</span>
+      </p>
     </div>
   </section>
 
   <footer>
     <details class="methodology">
-      <summary>Методология</summary>
+      <summary><span lang="ru">Методология</span><span lang="en">Methodology</span></summary>
       <div class="content">
         <div class="meth-grid">
           <div class="meth-card">
-            <h4>Сбор данных</h4>
-            <p>468 000 постов из 29 крупнейших провоенных (Z) Telegram-каналов, отобранных по частоте цитирования. Посты собраны за ±3 дня вокруг 167 курированных событий (февраль 2022 — март 2026).</p>
+            <h4><span lang="ru">Сбор данных</span><span lang="en">Data collection</span></h4>
+            <p>
+              <span lang="ru">468 000 постов из 29 крупнейших провоенных (Z) Telegram-каналов, отобранных по частоте цитирования. Посты собраны за ±3 дня вокруг 167 курированных событий (февраль 2022 — март 2026).</span>
+              <span lang="en">468,000 posts from the 29 largest pro-war (Z) Telegram channels, selected by citation frequency. Posts gathered ±3 days around 167 curated events (February 2022 — March 2026).</span>
+            </p>
           </div>
           <div class="meth-card">
-            <h4>Анализ (этап 1: эмоция)</h4>
-            <p>457 000 постов проанализированы LLM (Gemini 2.5 Flash): эмоциональная тональность (−5..+5), интенсивность (0–5), классификация по 10 настроениям и 42 темам. Посты от не-Z авторов (репосты) автоматически исключены.</p>
+            <h4><span lang="ru">Анализ (этап 1: эмоция)</span><span lang="en">Analysis (stage 1: emotion)</span></h4>
+            <p>
+              <span lang="ru">457 000 постов проанализированы LLM (Gemini 2.5 Flash): эмоциональная тональность (−5..+5), интенсивность (0–5), классификация по 10 настроениям и 42 темам. Посты от не-Z авторов (репосты) автоматически исключены.</span>
+              <span lang="en">457,000 posts analysed by LLM (Gemini 2.5 Flash): emotional valence (−5..+5), arousal (0–5), classification across 10 moods and 42 topics. Non-Z author posts (reposts) automatically excluded.</span>
+            </p>
           </div>
           <div class="meth-card">
-            <h4>Анализ (этап 2: ситуация)</h4>
-            <p>98 000 релевантных постов повторно оценены LLM: как Z-блогер воспринимает ситуацию для своей стороны (−5 = катастрофа, +5 = триумф). Эта метрика — основная на графиках. Нейтральные пересказы новостей без авторской оценки могут получать −1..−3 вместо 0.</p>
+            <h4><span lang="ru">Анализ (этап 2: ситуация)</span><span lang="en">Analysis (stage 2: situation)</span></h4>
+            <p>
+              <span lang="ru">98 000 релевантных постов повторно оценены LLM: как Z-блогер воспринимает ситуацию для своей стороны (−5 = катастрофа, +5 = триумф). Эта метрика — основная на графиках. Нейтральные пересказы новостей без авторской оценки могут получать −1..−3 вместо 0.</span>
+              <span lang="en">98,000 relevant posts re-evaluated by LLM: how a Z-blogger perceives the situation for their side (−5 = catastrophe, +5 = triumph). This metric is the primary one in the charts. Neutral news retellings without an author's opinion may score −1..−3 instead of 0.</span>
+            </p>
           </div>
           <div class="meth-card">
-            <h4>Каналы (топ-10)</h4>
+            <h4><span lang="ru">Каналы (топ-10)</span><span lang="en">Channels (top 10)</span></h4>
             <p id="meth-channels" style="font-size:11px;"></p>
           </div>
         </div>
       </div>
     </details>
-    <div style="margin-top:8px;">Прямой анализ постов Z-каналов через LLM · 29 каналов · 167 событий · 457K постов</div>
+    <div style="margin-top:8px;">
+      <span lang="ru">Прямой анализ постов Z-каналов через LLM · 29 каналов · 167 событий · 457K постов</span>
+      <span lang="en">Direct LLM analysis of Z-channel posts · 29 channels · 167 events · 457K posts</span>
+    </div>
   </footer>
 
   <!-- Section navigation dots -->
   <nav class="section-nav" id="section-nav">
-    <a href="#sec-takeaways"><span class="nav-tip">Находки</span></a>
-    <a href="#sec-timeline"><span class="nav-tip">Тональность</span></a>
-    <a href="#sec-trend"><span class="nav-tip">Тренд</span></a>
-    <a href="#sec-moods"><span class="nav-tip">Настроения</span></a>
-    <a href="#sec-scatter"><span class="nav-tip">Карта эмоций</span></a>
-    <a href="#sec-channels"><span class="nav-tip">Каналы</span></a>
-    <a href="#sec-table"><span class="nav-tip">Таблица</span></a>
-    <a href="#sec-about"><span class="nav-tip">О проекте</span></a>
+    <a href="#sec-takeaways"><span class="nav-tip"><span lang="ru">Находки</span><span lang="en">Takeaways</span></span></a>
+    <a href="#sec-timeline"><span class="nav-tip"><span lang="ru">Тональность</span><span lang="en">Situation</span></span></a>
+    <a href="#sec-trend"><span class="nav-tip"><span lang="ru">Тренд</span><span lang="en">Trend</span></span></a>
+    <a href="#sec-moods"><span class="nav-tip"><span lang="ru">Настроения</span><span lang="en">Moods</span></span></a>
+    <a href="#sec-scatter"><span class="nav-tip"><span lang="ru">Карта эмоций</span><span lang="en">Emotion map</span></span></a>
+    <a href="#sec-channels"><span class="nav-tip"><span lang="ru">Каналы</span><span lang="en">Channels</span></span></a>
+    <a href="#sec-table"><span class="nav-tip"><span lang="ru">Таблица</span><span lang="en">Table</span></span></a>
+    <a href="#sec-about"><span class="nav-tip"><span lang="ru">О проекте</span><span lang="en">About</span></span></a>
   </nav>
 </div>
 
@@ -420,8 +508,8 @@
 <div class="sidebar" id="sidebar">
   <div class="sidebar-resize" id="sidebar-resize"></div>
   <div class="sidebar-head">
-    <h3 id="sidebar-title">Детали события</h3>
-    <button class="sidebar-btn" onclick="closeExamples()" title="Закрыть">&times;</button>
+    <h3 id="sidebar-title"><span lang="ru">Детали события</span><span lang="en">Event details</span></h3>
+    <button class="sidebar-btn" onclick="closeExamples()" title="Close">&times;</button>
   </div>
   <div id="sidebar-meta" style="padding:4px 20px 8px;border-bottom:1px solid #E5E5E0;"></div>
   <div class="sb-events" id="sb-events"></div>
@@ -1473,6 +1561,20 @@ function renderChannelProfiles() {
   document.getElementById('channel-profiles').innerHTML = html;
 }
 renderChannelProfiles();
+</script>
+
+<script>
+  function setLang(lang) {
+    document.body.setAttribute('data-lang', lang);
+    document.documentElement.setAttribute('lang', lang);
+    document.getElementById('btn-ru').classList.toggle('active', lang === 'ru');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    try { localStorage.setItem('dashboard-lang', lang); } catch (e) {}
+  }
+  try {
+    var saved = localStorage.getItem('dashboard-lang');
+    if (saved === 'en' || saved === 'ru') setLang(saved);
+  } catch (e) {}
 </script>
 </body>
 </html>

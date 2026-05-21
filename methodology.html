@@ -106,13 +106,58 @@
 
   footer { text-align: center; padding: 40px 0 56px; color: #9CA3AF; font-size: 12px; }
 
+  /* Example & prompt code blocks */
+  .example-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .example-card { background: #fff; border: 1px solid #E5E5E0; border-radius: 10px;
+                    overflow: hidden; }
+  .example-card .ex-head { padding: 10px 16px; background: #F5F5F0;
+                             border-bottom: 1px solid #E5E5E0; font-size: 11px;
+                             color: #6B7280; text-transform: uppercase;
+                             letter-spacing: 0.5px; font-weight: 600;
+                             display: flex; align-items: center; gap: 8px; }
+  .example-card .ex-head .dot { width: 8px; height: 8px; border-radius: 50%;
+                                 background: #94A3B8; }
+  .example-card.input .ex-head .dot { background: #64748B; }
+  .example-card.output .ex-head .dot { background: #15803D; }
+  .example-card pre { padding: 16px 18px; font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+                       font-size: 11.5px; line-height: 1.55; color: #1a1a2e;
+                       overflow-x: auto; white-space: pre; margin: 0;
+                       background: #fff; }
+
+  .example-note { background: #F8F7F4; border: 1px solid #E5E5E0; border-radius: 8px;
+                    padding: 14px 18px; margin-top: 14px; font-size: 13px;
+                    color: #4B5563; line-height: 1.6; }
+  .example-note b { color: #1a1a2e; }
+
+  details.prompt-card { background: #fff; border: 1px solid #E5E5E0; border-radius: 10px;
+                         margin-bottom: 12px; overflow: hidden; }
+  details.prompt-card summary { padding: 12px 18px; cursor: pointer; font-size: 14px;
+                                  font-weight: 600; color: #1a1a2e; display: flex;
+                                  align-items: center; gap: 10px; user-select: none;
+                                  list-style: none; }
+  details.prompt-card summary::-webkit-details-marker { display: none; }
+  details.prompt-card summary::before { content: '▶'; font-size: 10px; color: #9CA3AF;
+                                          transition: transform 0.15s; }
+  details.prompt-card[open] summary::before { transform: rotate(90deg); }
+  details.prompt-card summary .badge { font-size: 11px; padding: 2px 8px; border-radius: 999px;
+                                         background: #F5F5F0; color: #6B7280; font-weight: 500;
+                                         text-transform: uppercase; letter-spacing: 0.4px;
+                                         margin-left: auto; }
+  details.prompt-card pre { padding: 0 20px 18px; font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+                              font-size: 11.5px; line-height: 1.6; color: #1a1a2e;
+                              overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;
+                              max-height: 480px; overflow-y: auto; margin: 0;
+                              border-top: 1px solid #F0F0EB; padding-top: 14px; }
+  details.prompt-card .prompt-meta { font-size: 12px; color: #6B7280; padding: 0 20px 10px;
+                                        line-height: 1.5; }
+
   @media (max-width: 768px) {
     .container { padding: 0 16px; }
     header { padding: 32px 0 16px; }
     header h1 { font-size: 24px; }
     section { padding: 28px 0; }
     section h2 { font-size: 18px; }
-    .grid, .cost-split { grid-template-columns: 1fr; }
+    .grid, .cost-split, .example-pair { grid-template-columns: 1fr; }
     .top-stats { gap: 24px; }
     .top-stat .num { font-size: 22px; }
     .lang-switch { top: 12px; right: 12px; }
@@ -713,6 +758,310 @@
         Когда проект выходит из активной фазы и уходит в штатное обновление, расходы
         стабилизируются ближе к нижней границе активного режима.</span>
     </div>
+  </section>
+
+  <section id="sec-example">
+    <div class="section-head">
+      <span class="num">06</span>
+      <h2>
+        <span lang="pl">Przykład: jeden post od początku do końca</span>
+        <span lang="ru">Пример: один пост от и до</span>
+      </h2>
+    </div>
+    <div class="desc">
+      <span lang="pl">Pokazujemy, jak wygląda surowy post pobrany z Telegrama oraz wynik
+        jego analizy LLM. Post z 6 sierpnia 2024 — pierwszy dzień ofensywy ukraińskiej
+        na obwód kurski.</span>
+      <span lang="ru">Покажем, как выглядит сырой пост, забранный из Telegram, и что
+        получается на выходе после LLM-анализа. Пост от 6 августа 2024 — первый день
+        вторжения ВСУ в Курскую область.</span>
+    </div>
+
+    <div class="example-pair">
+
+      <div class="example-card input">
+        <div class="ex-head">
+          <span class="dot"></span>
+          <span lang="pl">Surowe dane (wejście)</span>
+          <span lang="ru">Сырые данные (вход)</span>
+        </div>
+<pre>{
+  "channel": "dva_majors",
+  "post_id": 48889,
+  "date": "2024-08-06T06:49:52+00:00",
+  "event_date": "2024-08-06",
+  "event_label": "Вторжение ВСУ в Курскую область: первая волна",
+  "views": 170117,
+  "forwards": 1142,
+  "text": "🪖Кто же лезет в прорыв на Судже?\n\n22-я отдельная механизированная бригада\nВоеннослужащие Территориальной обороны\nРДК\nПодразделения АнтиБПЛА.\n\n«Лезут со всех щелей, отбиваем их, но это только начало»\n\nАрхангел Спецназа. Подписаться."
+}</pre>
+      </div>
+
+      <div class="example-card output">
+        <div class="ex-head">
+          <span class="dot"></span>
+          <span lang="pl">Wynik analizy LLM (wyjście)</span>
+          <span lang="ru">Результат LLM-анализа (выход)</span>
+        </div>
+<pre>{
+  "valence": -2,
+  "arousal": 3,
+  "confidence": 0.9,
+  "relevance": 1.0,
+  "mood": "тревога",
+  "topics": [
+    "фронт_наступление",
+    "курское_направление",
+    "тактика_стратегия"
+  ],
+  "persons": ["Архангел Спецназа"],
+  "summary": "Пост перечисляет подразделения ВСУ, участвующие в прорыве в Курской области, выражая тревогу.",
+  "is_z": 1,
+  "situation_score": -2
+}</pre>
+      </div>
+
+    </div>
+
+    <div class="example-note">
+      <span lang="pl"><b>Co tu widzimy.</b> Kanał dva_majors wymienia ukraińskie jednostki,
+        które przełamały granicę pod Sudżą. Model rozpoznaje: valence −2 (autor zaniepokojony,
+        ale nie panikuje), mood «тревога» (niepokój), arousal 3 (silne emocje), relevance 1.0
+        (post w pełni o wydarzeniu). Drugi przebieg daje is_z=1 (autor prowojenny) i
+        situation_score −2 (sytuacja dla strony rosyjskiej zła, ale nie katastrofalna).
+        Tematy wybrane z 42-elementowej taksonomii: kierunek kurski, ofensywa, taktyka.</span>
+      <span lang="ru"><b>Что мы тут видим.</b> Канал dva_majors перечисляет украинские
+        подразделения, прорвавшие границу под Суджей. Модель определяет: valence −2 (автор
+        встревожен, но не паникует), mood «тревога», arousal 3 (сильные эмоции),
+        relevance 1.0 (пост целиком о событии). Второй проход даёт is_z=1 (автор
+        провоенный) и situation_score −2 (ситуация для российской стороны плохая, но
+        не катастрофическая). Темы выбраны из таксономии в 42 категории: курское
+        направление, фронт_наступление, тактика_стратегия.</span>
+    </div>
+  </section>
+
+  <section id="sec-prompts">
+    <div class="section-head">
+      <span class="num">07</span>
+      <h2>
+        <span lang="pl">Prompty</span>
+        <span lang="ru">Промпты</span>
+      </h2>
+    </div>
+    <div class="desc">
+      <span lang="pl">Dwa system prompty — po jednym dla każdego przebiegu LLM. Język rosyjski,
+        ponieważ analizowane są rosyjskojęzyczne posty (model lepiej rozumie zadanie po
+        rosyjsku, gdy zadanie dotyczy rosyjskich tekstów). Każdy prompt ma jasne skale,
+        zasady decyzyjne i przykłady kalibracyjne.</span>
+      <span lang="ru">Два system-промпта — по одному на каждый LLM-проход. На русском, так
+        как анализируются русскоязычные посты (модель лучше понимает задачу на русском,
+        когда речь идёт о русских текстах). Каждый промпт содержит шкалы, правила и
+        калибровочные примеры.</span>
+    </div>
+
+    <details class="prompt-card">
+      <summary>
+        <span lang="pl">Przebieg 1 — emocja i tematy</span>
+        <span lang="ru">Проход 1 — эмоция и темы</span>
+        <span class="badge">analyze_z.py</span>
+      </summary>
+      <div class="prompt-meta">
+        <span lang="pl">Wynik: <code>valence, arousal, confidence, relevance, mood, topics, persons, summary</code>.
+          Plus 5 przykładów few-shot (nie pokazane tutaj).</span>
+        <span lang="ru">Возвращает: <code>valence, arousal, confidence, relevance, mood, topics, persons, summary</code>.
+          Плюс 5 few-shot примеров (здесь не показаны).</span>
+      </div>
+<pre>Ты — аналитик, специализирующийся на российском провоенном (Z) сегменте Telegram.
+
+Тебе дан пост из Z-канала с контекстом события. Проанализируй его и верни JSON.
+
+## Формат ответа
+
+Строго JSON, без markdown, без пояснений:
+{
+  "valence": &lt;число от -5 до +5&gt;,
+  "arousal": &lt;число от 0 до 5&gt;,
+  "confidence": &lt;число от 0.0 до 1.0&gt;,
+  "relevance": &lt;число от 0.0 до 1.0&gt;,
+  "mood": "&lt;одно из 10 настроений&gt;",
+  "topics": ["&lt;тема1&gt;", "&lt;тема2&gt;"],
+  "persons": ["&lt;персона1&gt;"],
+  "summary": "&lt;одно предложение: о чём пост&gt;"
+}
+
+## Шкала valence (эмоциональное состояние АВТОРА)
+
+ВАЖНО: valence измеряет как себя ЧУВСТВУЕТ автор поста, а НЕ объективную
+позитивность/негативность описываемых событий.
+- Если автор РАДУЕТСЯ чьей-то смерти или поражению врага — valence ПОЛОЖИТЕЛЬНЫЙ
+- Если автор ОГОРЧЁН победой своих — valence ОТРИЦАТЕЛЬНЫЙ
+- Злорадство, ликование, триумф → положительный valence
+- Страх, уныние, разочарование → отрицательный valence
+
+-5 = полная паника, катастрофа, «всё пропало»
+-4 = глубокое уныние, безнадёжность
+-3 = серьёзное недовольство, признание провалов
+-2 = ворчание, раздражение
+-1 = лёгкое недовольство
+ 0 = нейтральная констатация фактов
++1 = осторожный оптимизм
++2 = уверенность, позитив
++3 = бравада, «мы побеждаем»
++4 = сильный триумфализм
++5 = полная эйфория
+
+## Шкала arousal (эмоциональная интенсивность)
+
+0 = спокойное, аналитическое изложение
+1 = лёгкая эмоциональность
+2 = заметные эмоции
+3 = сильные эмоции
+4 = высокий накал
+5 = крайняя эмоциональность, истерика, ярость
+
+## relevance (релевантность к указанному событию)
+
+0.0 = пост не связан с событием
+0.3 = слабая связь (тот же период, но содержание о другом)
+0.5 = пост УПОМИНАЕТ событие или его прямые последствия В ТЕКСТЕ
+0.7 = пост ОБСУЖДАЕТ событие: анализирует, реагирует, комментирует
+1.0 = пост целиком посвящён данному событию
+
+ВАЖНО: relevance оценивает связь поста КОНКРЕТНО с указанным событием,
+а НЕ общую релевантность к войне.
+
+Строгие правила:
+- Для 0.5+ пост должен УПОМИНАТЬ событие или его прямые элементы В ТЕКСТЕ
+- Общие военные посты (сводки, сборы, техника) БЕЗ упоминания события → 0.0-0.3
+- Сборы средств, волонтёрство, благодарности → 0.0-0.3 (если не упоминают событие)
+- Фронтовые сводки с другого направления → 0.0 (другая тема)
+
+## topics — ТОЛЬКО из закрытого списка из 42 категорий:
+
+military: фронт_наступление, потери, бпла_дроны, артиллерия_обстрелы, пво_ввс,
+бронетехника, рэб_связь, флот, тактика_стратегия, разведка
+logistics: снабжение_логистика, впк, мобилизация_кадры, медицина, подготовка_обучение,
+волонтеры_сборы, дисциплина
+politics_ru: командование, кадровые_перестановки, внутренняя_политика, коррупция,
+репрессии_цензура, экономика_санкции, внутренние_инциденты
+ukraine: украина_политика, украина_общество, украина_потери
+info: пропаганда_медиа, идеология_патриотизм, культура, общественные_настроения,
+межнациональные
+external: переговоры_дипломатия, запад_нато, союзники, ядерное_оружие
+directions: курское_направление, донбасс, запорожье, херсон, харьков, крым,
+белгород_приграничье, другие_направления
+meta: не_по_теме
+
+Выбери 1-3 наиболее релевантные темы. Если пост не по теме войны/политики,
+используй «не_по_теме».
+
+## mood — одно из 10:
+
+паника, уныние, тревога, недовольство, нейтрально, сдержанный_оптимизм, оптимизм,
+эйфория, агрессия, ярость
+
+## persons
+
+Упомянутые персоны (ФИО или фамилия). Пустой список если нет.
+
+## summary
+
+Одно предложение на русском: суть поста.
+
+## Важно
+
+- Оценивай эмоциональное состояние АВТОРА ПОСТА, а не тональность описываемых событий
+- Ирония: если автор саркастичен — оценивай его реальное отношение, не буквальные слова
+- Реклама, промо каналов, личное, мемы → не_по_теме, confidence=0.3
+- Отвечай ТОЛЬКО JSON</pre>
+    </details>
+
+    <details class="prompt-card">
+      <summary>
+        <span lang="pl">Przebieg 2 — ocena sytuacji i is_z</span>
+        <span lang="ru">Проход 2 — оценка ситуации и is_z</span>
+        <span class="badge">assess_situation.py</span>
+      </summary>
+      <div class="prompt-meta">
+        <span lang="pl">Wynik: dwie liczby — <code>is_z</code> (0/1, czy autor jest prowojenny)
+          i <code>situation_score</code> (−5..+5, jak autor postrzega sytuację dla swojej strony).</span>
+        <span lang="ru">Возвращает: два числа — <code>is_z</code> (0/1, провоенный ли автор)
+          и <code>situation_score</code> (−5..+5, как автор воспринимает ситуацию для своей стороны).</span>
+      </div>
+<pre>Ты анализируешь пост из российского Telegram-канала, предположительно провоенного (Z).
+
+Задача 1: Определи, написан ли пост провоенным (Z) автором, или это репост/цитата
+с украинской или антивоенной стороны.
+Задача 2: Оцени, как автор воспринимает текущую ситуацию ДЛЯ СВОЕЙ СТОРОНЫ
+(России, армии, Z-движения).
+
+Шкала situation_score — оценка ситуации глазами автора:
+-5 = военная катастрофа: территория потеряна, враг на нашей земле, паника
+-4 = тяжёлое положение: крупные потери, провал стратегии, серьёзная угроза
+-3 = значительные проблемы: некомпетентность командования, усиление врага, коррупция
+-2 = заметные трудности: неудачи на отдельных участках, тревожные тенденции
+-1 = лёгкое беспокойство: мелкие неудачи, раздражение по частным вопросам
+ 0 = нейтрально / невозможно определить / чистые эмоции без оценки ситуации
++1 = лёгкий оптимизм: мелкие тактические успехи, надежда
++2 = заметный позитив: успехи на участке фронта, враг несёт потери
++3 = дела идут хорошо: значительное продвижение, укрепление позиций
++4 = крупный успех: взятие важного объекта, серьёзное поражение врага
++5 = триумф: стратегическая победа, враг разгромлен, эйфория от результата
+
+Ключевые правила:
+- Злость/ненависть к врагу БЕЗ оценки своей ситуации = 0 (эмоция, не сигнал)
+- Страх перед усилением врага (новое оружие, союзники, НАТО) = негатив
+- Радость от потерь/поражений врага = позитив
+- Злость на своё командование/правительство = негатив
+- Празднование военной победы = позитив
+- Ирония/сарказм по поводу своих властей = обычно негатив (недовольство)
+- Пост про блокировку Telegram / цензуру = -2..-4 (угроза для Z-сообщества)
+- Репост украинского контента без комментария автора = 0
+
+КРИТИЧЕСКИ ВАЖНО: Оценивай ТОЛЬКО то, что автор ЯВНО выражает в тексте.
+НЕ додумывай оценку из названия события или своих знаний о ситуации. Если автор
+просто пересказывает факт — это 0, даже если ты знаешь что этот факт плохой/хороший
+для России.
+
+- Нейтральная констатация фактов/новостей без авторской оценки = 0,
+  ДАЖЕ если сами факты негативные или позитивные.
+- Пересказ сводки МО, чужой статьи, заявления политика без комментария = 0 или -1.
+- Если факт объективно негативный для России (враг получает оружие), но автор
+  просто пересказывает без своей реакции = -1 максимум, НЕ ниже.
+- Если факт объективно позитивный (враг несёт потери), но автор просто
+  пересказывает = +1 максимум.
+- Если автор добавляет свой вывод/эмоцию — оценивай по выводу, не по пересказанному
+  факту. Тогда шкала не ограничена.
+
+ВАЖНО про контекст события: поле «Событие» — это технический контекст, к которому
+пост привязан по дате. Пост может быть не связан с событием или автор может не
+выражать мнения о нём. НЕ используй название события для оценки — используй
+ТОЛЬКО текст поста.
+
+Примеры:
+«ЧВК Вагнер полностью взяли Бахмут!» → z=1, s=+5
+«Генералы бездари, солдат на убой гонят» → z=1, s=-4
+«Бандеровцы, вон с планеты!» → z=1, s=0
+«Байден передаёт Украине ATACMS, это угроза» → z=1, s=-3
+«Отступаем из Херсона, это позор» → z=1, s=-5
+«Убит украинский командир, одним меньше» → z=1, s=+2
+«Оккупанты устроили геноцид в Мариуполе» → z=0, s=0
+«СВЕРШИЛОСЬ! Теперь не только Украина» (радость от ударов ПО России) → z=0, s=0
+«Блокируют Telegram — это удар по нашему сообществу» → z=1, s=-3
+
+Примеры нейтральной констатации (= 0, НЕ додумывай оценку из события):
+Событие: Удар по Севастополю. Пост: «За ночь ПВО уничтожила 216 БПЛА — Минобороны» → s=0
+Событие: Усиление НАТО. Пост: «Берлин поддержит Киев в разработке оружия» → s=0
+Событие: Теракт. Пост: «Террористы использовали автомат АК-12» → s=0
+Событие: Мятеж Пригожина. Пост: «Путин сегодня сделает ряд заявлений (с) Песков» → s=0
+Событие: Курск. Пост: «Аид (СпН Ахмат) публикует кадры операции» → s=0
+Событие: Переговоры. Пост: «Киев не согласен с рядом пунктов плана Трампа» → s=0
+
+Ответь РОВНО двумя числами через пробел: z situation_score
+z: 1 = провоенный автор, 0 = не провоенный / репост / неясно
+situation_score: от -5 до +5
+Ничего больше.</pre>
+    </details>
   </section>
 
   <footer>
